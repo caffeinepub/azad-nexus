@@ -11,6 +11,7 @@ export interface Product {
   description: string;
   specs: ProductSpec;
   badge?: string;
+  imagePath?: string;
 }
 
 export const products: Product[] = [
@@ -25,6 +26,7 @@ export const products: Product[] = [
       purity: '≥ 98%',
     },
     badge: 'Best Seller',
+    imagePath: 'rice-1121-basmati.dim_800x600.png',
   },
   {
     id: 'pusa-basmati',
@@ -36,6 +38,7 @@ export const products: Product[] = [
       moistureContent: '≤ 12.5%',
       purity: '≥ 97%',
     },
+    imagePath: 'rice-pusa-basmati.dim_800x600.png',
   },
   {
     id: 'steam-basmati',
@@ -47,6 +50,7 @@ export const products: Product[] = [
       moistureContent: '≤ 13%',
       purity: '≥ 97%',
     },
+    imagePath: 'rice-steam-basmati.dim_800x600.png',
   },
   {
     id: 'long-grain',
@@ -58,6 +62,7 @@ export const products: Product[] = [
       moistureContent: '≤ 14%',
       purity: '≥ 95%',
     },
+    imagePath: 'rice-long-grain.dim_800x600.png',
   },
   {
     id: 'ir64',
@@ -70,6 +75,7 @@ export const products: Product[] = [
       purity: '≥ 95%',
     },
     badge: 'High Demand',
+    imagePath: 'rice-ir64.dim_800x600.png',
   },
   {
     id: 'parboiled',
@@ -81,5 +87,6 @@ export const products: Product[] = [
       moistureContent: '≤ 14%',
       purity: '≥ 95%',
     },
+    imagePath: 'rice-parboiled.dim_800x600.png',
   },
 ];

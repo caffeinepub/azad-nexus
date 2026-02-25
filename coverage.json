@@ -1,290 +1,36 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-25T19:41:15.205Z",
+  "generatedAt": "2026-02-25T21:36:44.334Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 11,
-    "implemented": 10,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Build a multi-page React frontend with the following pages: Home, Products, Quality Assurance, Global Footprint, and Contact/Inquiry. Implement a client-side router (React Router) with a persistent top navigation bar containing the AZAD NEXUS logo/wordmark, nav links to all pages, and a prominent 'Request a Quote' CTA button.",
+        "summary": "Add the address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the Contact page (frontend/src/pages/Contact.tsx), displayed consistently with the existing text styling on that page. No additional contact details should be added.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/Navigation.tsx",
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/pages/QualityAssurance.tsx",
-          "frontend/src/pages/GlobalFootprint.tsx",
           "frontend/src/pages/Contact.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/Navigation.tsx",
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/pages/QualityAssurance.tsx",
-          "frontend/src/pages/GlobalFootprint.tsx",
           "frontend/src/pages/Contact.tsx"
-        ]
-      },
-      {
-        "id": "REQ-10",
-        "summary": "Add SEO-relevant meta tags to the HTML head (index.html): page title 'AZAD NEXUS — Premium Basmati Rice Exporter from India', meta description containing keywords 'Premium Basmati Rice Exporter, Indian Rice Supplier, Bulk Rice Export', and Open Graph tags for title, description, and image.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/index.html"
-        ],
-        "matchedFiles": [
-          "frontend/index.html"
-        ]
-      },
-      {
-        "id": "REQ-11",
-        "summary": "Render the generated hero split image (hero-split.dim_1920x1080.png) as the full-width hero background on the Home page. Render the rice grain texture image (rice-texture.dim_1200x800.png) as a decorative section background or product catalog accent. Render the AZAD NEXUS logo (azad-nexus-logo.dim_400x120.png) in the navigation bar and footer. All images must be served from frontend/public/assets/generated/.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/components/Navigation.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/components/Navigation.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Design the entire site with a premium, minimalist corporate aesthetic. Color palette: Deep Royal Blue (#0A1F5C or similar) as the primary brand color, Gold/Warm Amber (#C9A84C or similar) as the accent, and abundant white space with off-white backgrounds. Typography should be clean and professional (e.g., a serif display font for headlines, sans-serif for body). Apply this theme consistently across all pages and components.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/tailwind.config.js",
-          "frontend/src/index.css"
-        ],
-        "matchedFiles": [
-          "frontend/tailwind.config.js",
-          "frontend/src/index.css"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Build the Home page with the following sections in order: (1) Full-width hero section featuring the hero image (hero-split.dim_1920x1080.png) as background with the headline 'Connecting India's Finest Harvest to the World' and subheadline 'Premium Basmati & Non-Basmati Rice — Sourced Direct, Delivered Global', plus dual CTAs: 'Request a Quote' and 'Explore Products'; (2) Brief About Us summary (3–4 sentences about AZAD NEXUS as a trusted Indian rice exporter); (3) Featured Products horizontal slider showcasing 3–4 key rice varieties with name, one-line description, and a 'View Details' link; (4) 'Why Choose Us' section with three cards: Timely Delivery, Competitive Pricing, Direct Sourcing — each with an icon and short description; (5) 'Direct from Farmers' section with a short paragraph and a warm illustrative accent emphasizing farm-to-export authenticity.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/components/FeaturedProductsSlider.tsx",
-          "frontend/src/components/WhyChooseUsCard.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Home.tsx",
-          "frontend/src/components/FeaturedProductsSlider.tsx",
-          "frontend/src/components/WhyChooseUsCard.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Build the Products page with two categories: Category A — Premium Basmati (varieties: 1121, Pusa, Steam) and Category B — Non-Basmati (varieties: Long Grain, IR64, Parboiled). Each product card must display: product name, a short description, and a specs table with Grain Length (mm), Moisture Content (%), and Purity (%). Include a tab or section toggle to switch between the two categories.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/components/ProductCard.tsx",
-          "frontend/src/data/products.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Products.tsx",
-          "frontend/src/components/ProductCard.tsx",
-          "frontend/src/data/products.ts"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Build the Quality Assurance page with three sections: (1) Certifications — display placeholder badge cards for APEDA Registration and ISO Certification, each with a logo placeholder slot and a note that actual credentials will be updated; (2) Lab Testing — describe the testing process (moisture, purity, grain sizing) in a visually structured layout (e.g., numbered steps or icon list); (3) Packaging Standards — describe export-grade packaging with moisture-control bags and labeling compliance.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/QualityAssurance.tsx",
-          "frontend/src/components/CertificationBadge.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/QualityAssurance.tsx",
-          "frontend/src/components/CertificationBadge.tsx"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Build the Global Footprint section as a dedicated page section (or standalone page). Use a card/grid layout to highlight the following export markets: Middle East, Europe, Southeast Asia, and Africa. Each card should show the region name, a representative icon or flag cluster, and one line describing the trade relationship or key buyer type.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/GlobalFootprint.tsx",
-          "frontend/src/components/RegionCard.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/GlobalFootprint.tsx",
-          "frontend/src/components/RegionCard.tsx"
-        ]
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Build the Contact/Inquiry page with a lead-generation form containing the following fields: Full Name (text), Company Name (text), Country (text or select), Rice Variety (select: 1121 Basmati, Pusa Basmati, Steam Basmati, Long Grain, IR64, Parboiled), Quantity in MT (number), and an optional Message field. The form CTA button should read 'Request a Quote'. On submission, call the backend to store the inquiry. Show a success confirmation message upon successful submission.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Contact.tsx",
-          "frontend/src/hooks/useSubmitInquiry.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Contact.tsx"
-        ]
-      },
-      {
-        "id": "REQ-8",
-        "summary": "Create a Motoko backend actor that stores contact inquiries. Define an Inquiry record type with fields: id (Nat), name (Text), company (Text), country (Text), riceVariety (Text), quantityMT (Float), message (Text), timestamp (Int). Expose the following functions: submitInquiry (public, inserts a new inquiry and returns the assigned id), getInquiries (public, requires a hardcoded admin password parameter as Text, returns Array of all inquiries if the password matches, otherwise returns an error), and clearInquiries (admin-only with password check). Use a stable var array or stable HashMap for persistence.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-9",
-        "summary": "Build a password-protected Admin Panel page (route: /admin). It should show a password input form initially. On correct password entry, fetch and display all submitted inquiries in a sortable table with columns: ID, Name, Company, Country, Rice Variety, Quantity (MT), Message, and Timestamp. The admin password should match what is hardcoded in the backend. Include a 'Logout' button that clears the session and returns to the password screen.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Admin.tsx",
-          "frontend/src/hooks/useGetInquiries.ts",
-          "frontend/src/components/InquiriesTable.tsx",
-          "frontend/src/components/AccessDeniedScreen.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Admin.tsx",
-          "frontend/src/components/InquiriesTable.tsx",
-          "frontend/src/App.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/authorization/MixinAuthorization.mo",
-    "backend/authorization/access-control.mo",
-    "backend/main.mo",
     "build-request.json",
-    "build-template/Dockerfile",
-    "build-template/LICENSE",
     "build-template/README.md",
-    "build-template/deploy.sh",
-    "build-template/icp.yaml",
-    "build-template/package.json",
-    "build-template/pnpm-lock.yaml",
-    "build-template/pnpm-workspace.yaml",
-    "build-template/scripts/prune-unused-images.js",
-    "build-template/scripts/resize-images.js",
-    "build-template/src/backend/canister.yaml",
-    "build-template/src/backend/system-idl/aaaaa-aa.did",
-    "build-template/src/frontend/canister.yaml",
-    "build-template/src/frontend/components.json",
-    "build-template/src/frontend/env.json",
-    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
-    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
-    "build-template/src/frontend/eslint.config.js",
-    "build-template/src/frontend/package.json",
-    "build-template/src/frontend/postcss.config.js",
-    "build-template/src/frontend/src/components/ui/accordion.tsx",
-    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
-    "build-template/src/frontend/src/components/ui/alert.tsx",
-    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
-    "build-template/src/frontend/src/components/ui/avatar.tsx",
-    "build-template/src/frontend/src/components/ui/badge.tsx",
-    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
-    "build-template/src/frontend/src/components/ui/button.tsx",
-    "build-template/src/frontend/src/components/ui/calendar.tsx",
-    "build-template/src/frontend/src/components/ui/card.tsx",
-    "build-template/src/frontend/src/components/ui/carousel.tsx",
-    "build-template/src/frontend/src/components/ui/chart.tsx",
-    "build-template/src/frontend/src/components/ui/checkbox.tsx",
-    "build-template/src/frontend/src/components/ui/collapsible.tsx",
-    "build-template/src/frontend/src/components/ui/command.tsx",
-    "build-template/src/frontend/src/components/ui/context-menu.tsx",
-    "build-template/src/frontend/src/components/ui/dialog.tsx",
-    "build-template/src/frontend/src/components/ui/drawer.tsx",
-    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
-    "build-template/src/frontend/src/components/ui/form.tsx",
-    "build-template/src/frontend/src/components/ui/hover-card.tsx",
-    "build-template/src/frontend/src/components/ui/input-otp.tsx",
-    "build-template/src/frontend/src/components/ui/input.tsx",
-    "build-template/src/frontend/src/components/ui/label.tsx",
-    "build-template/src/frontend/src/components/ui/menubar.tsx",
-    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
-    "build-template/src/frontend/src/components/ui/pagination.tsx",
-    "build-template/src/frontend/src/components/ui/popover.tsx",
-    "build-template/src/frontend/src/components/ui/progress.tsx",
-    "build-template/src/frontend/src/components/ui/radio-group.tsx",
-    "build-template/src/frontend/src/components/ui/resizable.tsx",
-    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
-    "build-template/src/frontend/src/components/ui/select.tsx",
-    "build-template/src/frontend/src/components/ui/separator.tsx",
-    "build-template/src/frontend/src/components/ui/sheet.tsx",
-    "build-template/src/frontend/src/components/ui/sidebar.tsx",
-    "build-template/src/frontend/src/components/ui/skeleton.tsx",
-    "build-template/src/frontend/src/components/ui/slider.tsx",
-    "build-template/src/frontend/src/components/ui/sonner.tsx",
-    "build-template/src/frontend/src/components/ui/switch.tsx",
-    "build-template/src/frontend/src/components/ui/table.tsx",
-    "build-template/src/frontend/src/components/ui/tabs.tsx",
-    "build-template/src/frontend/src/components/ui/textarea.tsx",
-    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
-    "build-template/src/frontend/src/components/ui/toggle.tsx",
-    "build-template/src/frontend/src/components/ui/tooltip.tsx",
-    "build-template/src/frontend/src/hooks/use-mobile.tsx",
-    "build-template/src/frontend/src/lib/utils.ts",
-    "build-template/src/frontend/tsconfig.json",
-    "build-template/src/frontend/vite.config.js",
-    "build-template/tsconfig.json",
     "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/index.css",
-    "frontend/index.html",
-    "frontend/public/assets/generated/azad-nexus-logo.dim_400x120.png",
-    "frontend/public/assets/generated/hero-split.dim_1920x1080.png",
-    "frontend/public/assets/generated/rice-texture.dim_1200x800.png",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/CertificationBadge.tsx",
-    "frontend/src/components/FeaturedProductsSlider.tsx",
-    "frontend/src/components/Footer.tsx",
-    "frontend/src/components/InquiriesTable.tsx",
-    "frontend/src/components/Navigation.tsx",
-    "frontend/src/components/ProductCard.tsx",
-    "frontend/src/components/RegionCard.tsx",
-    "frontend/src/components/WhyChooseUsCard.tsx",
-    "frontend/src/config.ts",
-    "frontend/src/data/products.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
-    "frontend/src/main.tsx",
-    "frontend/src/pages/Admin.tsx",
     "frontend/src/pages/Contact.tsx",
-    "frontend/src/pages/GlobalFootprint.tsx",
-    "frontend/src/pages/Home.tsx",
-    "frontend/src/pages/Products.tsx",
-    "frontend/src/pages/QualityAssurance.tsx",
-    "frontend/src/ui-summary.json",
-    "frontend/src/utils/StorageClient.ts",
-    "frontend/src/utils/urlParams.ts",
-    "frontend/tailwind.config.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

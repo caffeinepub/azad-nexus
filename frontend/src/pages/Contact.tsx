@@ -112,6 +112,59 @@ export default function Contact() {
         </div>
       </div>
 
+      {/* Contact Details Banner */}
+      <div style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} className="py-5 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12">
+          <a
+            href="tel:+917058779219"
+            className="flex items-center gap-3 group"
+          >
+            <div
+              className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0 transition-colors"
+              style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
+            >
+              <Phone size={16} className="text-white" />
+            </div>
+            <div>
+              <div className="font-body text-xs font-semibold uppercase tracking-wider" style={{ color: 'oklch(0.22 0.09 255)' }}>
+                Call Us
+              </div>
+              <div
+                className="font-body text-base font-bold group-hover:underline"
+                style={{ color: 'oklch(0.16 0.07 255)' }}
+              >
+                +91 70587 79219
+              </div>
+            </div>
+          </a>
+
+          <div className="hidden sm:block w-px h-10 bg-white/40" />
+
+          <a
+            href="mailto:azadnexus.global@gmail.com"
+            className="flex items-center gap-3 group"
+          >
+            <div
+              className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0 transition-colors"
+              style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
+            >
+              <Mail size={16} className="text-white" />
+            </div>
+            <div>
+              <div className="font-body text-xs font-semibold uppercase tracking-wider" style={{ color: 'oklch(0.22 0.09 255)' }}>
+                Email Us
+              </div>
+              <div
+                className="font-body text-base font-bold group-hover:underline"
+                style={{ color: 'oklch(0.16 0.07 255)' }}
+              >
+                azadnexus.global@gmail.com
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -120,10 +173,15 @@ export default function Contact() {
               <h2 className="font-display text-2xl font-bold text-royal mb-6">Contact Information</h2>
               <div className="space-y-5">
                 {[
-                  { icon: MapPin, label: 'Location', value: 'India — Exporting Globally' },
-                  { icon: Mail, label: 'Email', value: 'info@azadnexus.com' },
-                  { icon: Phone, label: 'Phone', value: '+91 XXXXX XXXXX' },
-                  { icon: Clock, label: 'Response Time', value: 'Within 24 business hours' },
+                  {
+                    icon: MapPin,
+                    label: 'Location',
+                    value: 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035',
+                    href: undefined,
+                  },
+                  { icon: Mail, label: 'Email', value: 'azadnexus.global@gmail.com', href: 'mailto:azadnexus.global@gmail.com' },
+                  { icon: Phone, label: 'Phone', value: '+91 70587 79219', href: 'tel:+917058779219' },
+                  { icon: Clock, label: 'Response Time', value: 'Within 24 business hours', href: undefined },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4">
                     <div
@@ -134,7 +192,16 @@ export default function Contact() {
                     </div>
                     <div>
                       <div className="font-body text-xs text-muted-foreground uppercase tracking-wider">{item.label}</div>
-                      <div className="font-body text-sm font-medium text-foreground mt-0.5">{item.value}</div>
+                      {item.href ? (
+                        <a
+                          href={item.href}
+                          className="font-body text-sm font-medium text-foreground mt-0.5 hover:text-royal transition-colors hover:underline block"
+                        >
+                          {item.value}
+                        </a>
+                      ) : (
+                        <div className="font-body text-sm font-medium text-foreground mt-0.5">{item.value}</div>
+                      )}
                     </div>
                   </div>
                 ))}

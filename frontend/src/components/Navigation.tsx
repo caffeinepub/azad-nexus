@@ -23,9 +23,13 @@ export default function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex items-center shrink-0" onClick={() => setMobileOpen(false)}>
             <img
-              src="/assets/generated/azad-nexus-logo.dim_400x120.png"
+              src="/assets/generated/azad-nexus-logo-real.dim_960x960.png"
               alt="AZAD NEXUS"
-              className="h-12 w-auto object-contain"
+              className="h-14 w-auto object-contain"
+              style={{
+                mixBlendMode: 'screen',
+                filter: 'drop-shadow(0 0 8px rgba(201, 168, 76, 0.55)) brightness(1.08)',
+              }}
             />
           </Link>
 

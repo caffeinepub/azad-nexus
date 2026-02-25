@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Ruler, Droplets, CheckCircle } from 'lucide-react';
 import type { Product } from '../data/products';
 
@@ -9,6 +8,19 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white rounded-sm border border-border shadow-xs hover:shadow-royal transition-shadow duration-300 overflow-hidden group">
+      {/* Product Image */}
+      {product.imagePath && (
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
+          <img
+            src={`/assets/generated/${product.imagePath}`}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          {/* Subtle gold overlay on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+      )}
+
       {/* Card Header */}
       <div className="bg-royal p-6 relative">
         <div className="absolute inset-0 opacity-10"
