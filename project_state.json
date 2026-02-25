@@ -1,16 +1,19 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
+  "summary": "Project for azadnexus.com with a buyer inquiries system and admin dashboard. Admin panel is accessible at /admin with username/password authentication (azadnexus.global@gmail.com / Karusu_7). Only the admin can log in and view buyer inquiries.",
+  "architectural_notes": [
+    "Admin panel at /admin secured with username/password authentication; credentials stored securely on backend",
+    "Admin credentials: username azadnexus.global@gmail.com, password Karusu_7"
+  ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-the-address-akurdi-near-khandoba-mandir-pimpri-chinchwad-pune-411035-as-plain-text-in-the-contact-page-frontend-src-pages-contact-tsx-displayed-consistently-with-the-existing-text-styling-on-that-page-no-additional-contact-details-should-be-added",
-      "title": "Add the address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the Contact page (frontend/src/pages/Contact.tsx), displayed consistently with the existing text styling on that page. No additional contact details should be added.",
+      "id": "feature-replace-the-internet-identity-based-admin-authentication-on-the-admin-page-with-a-username-password-login-form-the-login-form-should-have-fields-for-email-and-password-a-submit-button-and-display-an-error-message-on-invalid-credentials-on-successful-login-show-the-buyer-inquiries-dashboard-add-a-logout-button-to-return-to-the-login-screen",
+      "title": "Replace the Internet Identity-based admin authentication on the /admin page with a username/password login form. The login form should have fields for email and password, a submit button, and display an error message on invalid credentials. On successful login, show the buyer inquiries dashboard. Add a logout button to return to the login screen.",
       "reqIds": [
-        "REQ-1"
+        "REQ-2"
       ],
       "version": 1
     }
@@ -18,12 +21,21 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the Contact section",
+      "summary": "Admin dashboard at /admin with username/password login to view buyer inquiries",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add a backend function to authenticate admin users with username/password credentials. The hardcoded admin username is 'azadnexus.global@gmail.com' and password is 'Karusu_7'. The function should return a session token or boolean success indicator upon valid credentials, and reject invalid ones.",
+      "reqIds": [
+        "REQ-1"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Add address to Contact section",
+  "gameProjectType": "none",
+  "projectName": "Azad Nexus",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

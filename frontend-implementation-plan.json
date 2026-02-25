@@ -1,22 +1,29 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add address to Contact section",
+  "title": "Admin dashboard with username/password authentication",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add the address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the Contact page, styled consistently with existing text",
+      "id": "REQ-2",
+      "summary": "Replace Internet Identity admin authentication with username/password login form",
       "acceptanceCriteria": [
-        "The address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' is visible in the Contact section/page.",
-        "The address is rendered as plain text, styled consistently with other text content on the Contact page.",
-        "No phone number, email, or other contact details are added alongside the address.",
-        "No other sections or pages are affected."
+        "The /admin route shows a login form with email and password fields before authentication",
+        "Submitting correct credentials (azadnexus.global@gmail.com / Karusu_7) grants access to the inquiries dashboard",
+        "Submitting incorrect credentials shows a visible error message",
+        "A logout button is visible on the dashboard and returns the user to the login form",
+        "The Internet Identity login flow is removed from the admin page",
+        "No 'Access Denied' error appears when using the correct credentials"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/Contact.tsx",
+          "path": "frontend/src/pages/Admin.tsx",
           "operation": "modify",
-          "description": "Add the address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the contact information section, displayed with the same styling as existing text elements on the page. The address should be positioned logically within the existing layout without adding any other contact details or modifying the form structure."
+          "description": "Remove Internet Identity authentication logic and replace with a username/password login form. Add state management for login status, error messages, and session management. Call the backend authenticateAdmin function with form credentials. Display InquiriesTable only after successful authentication. Add a logout button that clears the authenticated session and returns to the login form. Remove all references to useInternetIdentity hook and isCallerAdmin query."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a new mutation hook useAuthenticateAdmin that calls actor.authenticateAdmin(username, password) and returns the authentication result. This hook should use useMutation from TanStack Query and require the actor from useActor."
         }
       ]
     }

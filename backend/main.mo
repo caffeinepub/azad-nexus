@@ -13,6 +13,19 @@ actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
+  // ── Admin Credentials ────────────────────────────────────────────────────────
+  let adminUsername = "azadnexus.global@gmail.com";
+  let adminPassword = "Karusu_7";
+
+  // ── Authentication ───────────────────────────────────────────────────────────
+  public shared ({ caller }) func authenticateAdmin(username : Text, password : Text) : async Bool {
+    if (username == adminUsername and password == adminPassword) {
+      true;
+    } else {
+      Runtime.trap("Invalid credentials");
+    };
+  };
+
   // ── User Profiles ────────────────────────────────────────────────────────────
   public type UserProfile = {
     name : Text;

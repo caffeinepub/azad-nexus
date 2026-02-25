@@ -27,6 +27,7 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    authenticateAdmin(username: string, password: string): Promise<boolean>;
     /**
      * / Clear all inquiries. Admin-only.
      */

@@ -46,6 +46,24 @@ export function useGetInquiries(enabled: boolean) {
   });
 }
 
+/** Alias for useGetInquiries — fetches all inquiries (admin-only). */
+export function useGetAllInquiries(enabled = true) {
+  return useGetInquiries(enabled);
+}
+
+// ── Admin Authentication ──────────────────────────────────────────────────────
+
+export function useAuthenticateAdmin() {
+  const { actor } = useActor();
+
+  return useMutation({
+    mutationFn: async (credentials: { username: string; password: string }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.authenticateAdmin(credentials.username, credentials.password);
+    },
+  });
+}
+
 // ── User Profile ─────────────────────────────────────────────────────────────
 
 export function useGetCallerUserProfile() {

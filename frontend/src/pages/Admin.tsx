@@ -1,57 +1,141 @@
-import { useState } from 'react';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useIsCallerAdmin, useGetInquiries } from '../hooks/useQueries';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState, FormEvent } from 'react';
+import { useAuthenticateAdmin, useGetInquiries } from '../hooks/useQueries';
 import InquiriesTable from '../components/InquiriesTable';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, ShieldAlert, Loader2, RefreshCw, Lock } from 'lucide-react';
+import { LogOut, RefreshCw, Lock, Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 export default function Admin() {
-  const { identity, login, clear, isLoggingIn, isInitializing } = useInternetIdentity();
-  const queryClient = useQueryClient();
-  const isAuthenticated = !!identity;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
-  const { data: isAdmin, isLoading: adminLoading } = useIsCallerAdmin();
-  const { data: inquiries, isLoading: inquiriesLoading, refetch } = useGetInquiries(!!isAdmin);
+  const authenticateMutation = useAuthenticateAdmin();
+  const { data: inquiries, isLoading: inquiriesLoading, refetch } = useGetInquiries(isAuthenticated);
 
-  const handleLogout = async () => {
-    await clear();
-    queryClient.clear();
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+
+    try {
+      const result = await authenticateMutation.mutateAsync({ username, password });
+      if (result) {
+        setIsAuthenticated(true);
+        setUsername('');
+        setPassword('');
+      } else {
+        setLoginError('Invalid credentials. Please try again.');
+      }
+    } catch {
+      setLoginError('Invalid credentials. Please try again.');
+    }
   };
 
-  const isLoading = isInitializing || adminLoading;
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setLoginError('');
+  };
 
-  // Not authenticated
-  if (!isAuthenticated && !isLoading) {
+  // Login form
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-        <div className="bg-white rounded-sm border border-border shadow-royal p-10 max-w-md w-full text-center">
-          <div
-            className="w-16 h-16 rounded-sm flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
-          >
-            <Lock size={28} style={{ color: 'oklch(0.75 0.12 75)' }} />
+        <div className="bg-white rounded-sm border border-border shadow-royal p-10 max-w-md w-full">
+          {/* Logo / Icon */}
+          <div className="text-center mb-8">
+            <div
+              className="w-16 h-16 rounded-sm flex items-center justify-center mx-auto mb-5"
+              style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
+            >
+              <Lock size={28} style={{ color: 'oklch(0.75 0.12 75)' }} />
+            </div>
+            <h1 className="font-display text-2xl font-bold text-royal mb-2">Admin Access</h1>
+            <p className="font-body text-sm text-muted-foreground">
+              Sign in with your administrator credentials to manage inquiries.
+            </p>
           </div>
-          <h1 className="font-display text-2xl font-bold text-royal mb-3">Admin Access</h1>
-          <p className="font-body text-sm text-muted-foreground mb-8">
-            Sign in with your administrator credentials to access the inquiry management panel.
-          </p>
-          <Button
-            onClick={login}
-            disabled={isLoggingIn}
-            className="w-full font-body font-semibold rounded-sm"
-            style={{ backgroundColor: 'oklch(0.22 0.09 255)', color: 'white' }}
-          >
-            {isLoggingIn ? (
-              <><Loader2 size={16} className="mr-2 animate-spin" /> Signing in...</>
-            ) : (
-              'Sign In'
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-1.5">
+              <Label htmlFor="username" className="font-body text-sm font-medium text-foreground">
+                Email Address
+              </Label>
+              <Input
+                id="username"
+                type="email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin@example.com"
+                required
+                autoComplete="username"
+                className="font-body rounded-sm"
+                disabled={authenticateMutation.isPending}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="font-body text-sm font-medium text-foreground">
+                Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="current-password"
+                  className="font-body rounded-sm pr-10"
+                  disabled={authenticateMutation.isPending}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error message */}
+            {loginError && (
+              <div className="flex items-center gap-2 rounded-sm border border-destructive/30 bg-destructive/5 px-3 py-2.5">
+                <AlertCircle size={15} className="text-destructive shrink-0" />
+                <p className="font-body text-sm text-destructive">{loginError}</p>
+              </div>
             )}
-          </Button>
-          <div className="mt-6">
-            <Link to="/" className="font-body text-sm text-muted-foreground hover:text-royal transition-colors">
+
+            <Button
+              type="submit"
+              disabled={authenticateMutation.isPending || !username || !password}
+              className="w-full font-body font-semibold rounded-sm"
+              style={{ backgroundColor: 'oklch(0.22 0.09 255)', color: 'white' }}
+            >
+              {authenticateMutation.isPending ? (
+                <>
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <Link
+              to="/"
+              className="font-body text-sm text-muted-foreground hover:text-royal transition-colors"
+            >
               ← Return to Website
             </Link>
           </div>
@@ -60,56 +144,7 @@ export default function Admin() {
     );
   }
 
-  // Loading
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4" style={{ color: 'oklch(0.22 0.09 255)' }} />
-          <p className="font-body text-sm text-muted-foreground">Verifying access...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Not admin
-  if (isAuthenticated && !adminLoading && !isAdmin) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-        <div className="bg-white rounded-sm border border-border shadow-royal p-10 max-w-md w-full text-center">
-          <div
-            className="w-16 h-16 rounded-sm flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: 'oklch(0.96 0.02 255)' }}
-          >
-            <ShieldAlert size={28} style={{ color: 'oklch(0.22 0.09 255)' }} />
-          </div>
-          <h1 className="font-display text-2xl font-bold text-royal mb-3">Access Denied</h1>
-          <p className="font-body text-sm text-muted-foreground mb-8">
-            Your account does not have administrator privileges. Please contact the system administrator.
-          </p>
-          <div className="flex flex-col gap-3">
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="w-full font-body font-semibold rounded-sm border-royal text-royal hover:bg-royal hover:text-white transition-colors"
-            >
-              <LogOut size={16} className="mr-2" /> Sign Out
-            </Button>
-            <Link to="/">
-              <Button
-                variant="ghost"
-                className="w-full font-body text-sm text-muted-foreground"
-              >
-                Return to Website
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Admin panel
+  // Admin dashboard
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
@@ -146,13 +181,19 @@ export default function Admin() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
           {[
             { label: 'Total Inquiries', value: inquiries?.length ?? '—' },
-            { label: 'This Month', value: inquiries?.filter(i => {
-              const ms = Number(i.timestamp) / 1_000_000;
-              const d = new Date(ms);
-              const now = new Date();
-              return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-            }).length ?? '—' },
-            { label: 'Unique Countries', value: inquiries ? new Set(inquiries.map(i => i.country)).size : '—' },
+            {
+              label: 'This Month',
+              value: inquiries?.filter((i) => {
+                const ms = Number(i.timestamp) / 1_000_000;
+                const d = new Date(ms);
+                const now = new Date();
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+              }).length ?? '—',
+            },
+            {
+              label: 'Unique Countries',
+              value: inquiries ? new Set(inquiries.map((i) => i.country)).size : '—',
+            },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-sm border border-border p-6 shadow-xs">
               <div className="font-display text-3xl font-bold text-royal">{stat.value}</div>

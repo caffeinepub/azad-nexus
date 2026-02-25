@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-the-address-akurdi-near-khandoba-mandir-pimpri-chinchwad-pune-411035-as-plain-text-in-the-contact-page-frontend-src-pages-contact-tsx-displayed-consistently-with-the-existing-text-styling-on-that-page-no-additional-contact-details-should-be-added",
-      "featureTitle": "Add the address 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035' as plain text in the Contact page (frontend/src/pages/Contact.tsx), displayed consistently with the existing text styling on that page. No additional contact details should be added.",
+      "featureId": "feature-replace-the-internet-identity-based-admin-authentication-on-the-admin-page-with-a-username-password-login-form-the-login-form-should-have-fields-for-email-and-password-a-submit-button-and-display-an-error-message-on-invalid-credentials-on-successful-login-show-the-buyer-inquiries-dashboard-add-a-logout-button-to-return-to-the-login-screen",
+      "featureTitle": "Replace the Internet Identity-based admin authentication on the /admin page with a username/password login form. The login form should have fields for email and password, a submit button, and display an error message on invalid credentials. On successful login, show the buyer inquiries dashboard. Add a logout button to return to the login screen.",
       "files": [
-        "frontend/src/pages/Contact.tsx"
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/Admin.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,7 +17,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-2"
       ],
       "confidence": "high"
     }
