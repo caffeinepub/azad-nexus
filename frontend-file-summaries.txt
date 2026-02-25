@@ -1,0 +1,3 @@
+{
+  "frontend/src/components/FeaturedProductsSlider.tsx": "Horizontal scrollable slider showcasing 4 featured rice varieties with scroll buttons (desktop only via a wrapper div) and \"View Details\" links, fixing the conflicting Tailwind class lint error."
+}

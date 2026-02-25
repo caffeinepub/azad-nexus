@@ -1,0 +1,240 @@
+{
+  "kind": "build_request",
+  "title": "AZAD NEXUS — B2B Rice Export Website",
+  "projectName": "Azad Nexus",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Build a multi-page React frontend with the following pages: Home, Products, Quality Assurance, Global Footprint, and Contact/Inquiry. Implement a client-side router (React Router) with a persistent top navigation bar containing the AZAD NEXUS logo/wordmark, nav links to all pages, and a prominent 'Request a Quote' CTA button.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Site Structure & Pages"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All five pages are accessible via navigation links",
+        "Navigation bar is visible and responsive on all screen sizes",
+        "'Request a Quote' CTA button scrolls to or navigates to the Contact/Inquiry page"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Design the entire site with a premium, minimalist corporate aesthetic. Color palette: Deep Royal Blue (#0A1F5C or similar) as the primary brand color, Gold/Warm Amber (#C9A84C or similar) as the accent, and abundant white space with off-white backgrounds. Typography should be clean and professional (e.g., a serif display font for headlines, sans-serif for body). Apply this theme consistently across all pages and components.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Deep Royal Blue (Trust), Gold or Warm White (Quality/Grains), and plenty of white space"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Royal Blue and Gold accent colors are applied consistently across all pages",
+        "White space is generous and layout feels uncluttered and premium",
+        "Typography hierarchy is clear with distinct heading and body styles"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build the Home page with the following sections in order: (1) Full-width hero section featuring the hero image (hero-split.dim_1920x1080.png) as background with the headline 'Connecting India's Finest Harvest to the World' and subheadline 'Premium Basmati & Non-Basmati Rice — Sourced Direct, Delivered Global', plus dual CTAs: 'Request a Quote' and 'Explore Products'; (2) Brief About Us summary (3–4 sentences about AZAD NEXUS as a trusted Indian rice exporter); (3) Featured Products horizontal slider showcasing 3–4 key rice varieties with name, one-line description, and a 'View Details' link; (4) 'Why Choose Us' section with three cards: Timely Delivery, Competitive Pricing, Direct Sourcing — each with an icon and short description; (5) 'Direct from Farmers' section with a short paragraph and a warm illustrative accent emphasizing farm-to-export authenticity.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Hero section with a powerful headline",
+          "Why Choose Us",
+          "Direct from Farmers"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hero section renders the split image as background with overlaid headline and CTAs",
+        "About Us summary is present below the hero",
+        "Featured products slider is functional and scrollable",
+        "'Why Choose Us' shows three cards with distinct icons",
+        "'Direct from Farmers' section is visually distinct and present on the page"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Build the Products page with two categories: Category A — Premium Basmati (varieties: 1121, Pusa, Steam) and Category B — Non-Basmati (varieties: Long Grain, IR64, Parboiled). Each product card must display: product name, a short description, and a specs table with Grain Length (mm), Moisture Content (%), and Purity (%). Include a tab or section toggle to switch between the two categories.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Category A: Premium Basmati (1121, Pusa, Steam)",
+          "Category B: Non-Basmati (Long grain, IR64, Parboiled)",
+          "grain length, moisture content, and purity percentage"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Both Basmati and Non-Basmati categories are accessible via tabs or toggle",
+        "Each product shows name, description, and a specs table with all three fields",
+        "All six product varieties are present"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Build the Quality Assurance page with three sections: (1) Certifications — display placeholder badge cards for APEDA Registration and ISO Certification, each with a logo placeholder slot and a note that actual credentials will be updated; (2) Lab Testing — describe the testing process (moisture, purity, grain sizing) in a visually structured layout (e.g., numbered steps or icon list); (3) Packaging Standards — describe export-grade packaging with moisture-control bags and labeling compliance.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Quality Assurance: A section dedicated to certifications, lab testing, and packaging standards",
+          "APEDA registration or any ISO certifications"
+        ]
+      },
+      "acceptanceCriteria": [
+        "APEDA and ISO placeholder badges are rendered as distinct visual cards",
+        "Lab testing section clearly outlines the testing criteria",
+        "Packaging standards section is present and readable"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Build the Global Footprint section as a dedicated page section (or standalone page). Use a card/grid layout to highlight the following export markets: Middle East, Europe, Southeast Asia, and Africa. Each card should show the region name, a representative icon or flag cluster, and one line describing the trade relationship or key buyer type.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "A map or section highlighting export capabilities",
+          "Middle East, Europe, Southeast Asia, Africa"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Four region cards are displayed in a responsive grid",
+        "Each card has a region name, icon, and short description",
+        "Section is accessible from the main navigation"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Build the Contact/Inquiry page with a lead-generation form containing the following fields: Full Name (text), Company Name (text), Country (text or select), Rice Variety (select: 1121 Basmati, Pusa Basmati, Steam Basmati, Long Grain, IR64, Parboiled), Quantity in MT (number), and an optional Message field. The form CTA button should read 'Request a Quote'. On submission, call the backend to store the inquiry. Show a success confirmation message upon successful submission.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Contact/Inquiry: A lead-generation form requesting: Name, Company, Country, Rice Variety, and Quantity (MT)",
+          "Request a Quote"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All required fields are present and validated before submission",
+        "Rice Variety is a dropdown with all six varieties",
+        "Form calls backend on submit and shows a success message",
+        "CTA button reads 'Request a Quote'"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Create a Motoko backend actor that stores contact inquiries. Define an Inquiry record type with fields: id (Nat), name (Text), company (Text), country (Text), riceVariety (Text), quantityMT (Float), message (Text), timestamp (Int). Expose the following functions: submitInquiry (public, inserts a new inquiry and returns the assigned id), getInquiries (public, requires a hardcoded admin password parameter as Text, returns Array of all inquiries if the password matches, otherwise returns an error), and clearInquiries (admin-only with password check). Use a stable var array or stable HashMap for persistence.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "inquiry form will store submissions on-chain",
+          "password-protected admin panel to view all submitted inquiries"
+        ]
+      },
+      "acceptanceCriteria": [
+        "submitInquiry stores a new inquiry and returns its ID",
+        "getInquiries returns all inquiries only when the correct admin password is supplied",
+        "Inquiry records persist across canister upgrades via stable variables",
+        "All required fields are present in the Inquiry type"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Build a password-protected Admin Panel page (route: /admin). It should show a password input form initially. On correct password entry, fetch and display all submitted inquiries in a sortable table with columns: ID, Name, Company, Country, Rice Variety, Quantity (MT), Message, and Timestamp. The admin password should match what is hardcoded in the backend. Include a 'Logout' button that clears the session and returns to the password screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "password-protected admin panel to view all submitted inquiries"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin page at /admin shows a password gate before displaying data",
+        "Incorrect password shows an error message",
+        "Correct password reveals the inquiries table with all specified columns",
+        "Timestamps are rendered in a human-readable format",
+        "Logout button clears access and returns to the password screen"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add SEO-relevant meta tags to the HTML head (index.html): page title 'AZAD NEXUS — Premium Basmati Rice Exporter from India', meta description containing keywords 'Premium Basmati Rice Exporter, Indian Rice Supplier, Bulk Rice Export', and Open Graph tags for title, description, and image.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "SEO Optimized: Use keywords like 'Premium Basmati Rice Exporter,' 'Indian Rice Supplier,' and 'Bulk Rice Export'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "HTML title tag is set to the specified title",
+        "Meta description contains the specified SEO keywords",
+        "Open Graph meta tags are present"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Render the generated hero split image (hero-split.dim_1920x1080.png) as the full-width hero background on the Home page. Render the rice grain texture image (rice-texture.dim_1200x800.png) as a decorative section background or product catalog accent. Render the AZAD NEXUS logo (azad-nexus-logo.dim_400x120.png) in the navigation bar and footer. All images must be served from frontend/public/assets/generated/.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hero image is used as the Home page hero background",
+        "Rice texture image appears as a decorative accent in the appropriate section",
+        "Logo appears in both the navbar and footer",
+        "All image paths resolve correctly from frontend/public/assets/generated/"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not use email delivery services (SMTP, SendGrid, etc.) — all form submissions must be stored on-chain in the Motoko backend",
+    "Do not use interactive geolocation maps — use a card/grid layout for the Global Footprint section",
+    "Admin password must be hardcoded in the backend — no external auth services",
+    "All generated images must be served from frontend/public/assets/generated/ — never routed through the backend"
+  ],
+  "nonGoals": [
+    "Real-time chat or messaging features",
+    "User account registration or Internet Identity login for end users",
+    "E-commerce or payment processing",
+    "Email notifications for form submissions",
+    "Interactive world map with geolocation",
+    "CMS or dynamic content management"
+  ],
+  "imageRequirements": {
+    "required": [
+      "Cinematic wide-angle split-screen commercial photograph. Left half: macro close-up of premium long-grain Basmati rice pouring into a burlap sack, warm golden sunlight, earthy amber and ochre tones. Right half: a modern cargo ship docked at a high-tech port at dawn, cool blue tones, dramatic sky. Seamless gradient transition in the center. Professional 8k commercial photography style. (hero-split.dim_1920x1080.png)",
+      "Top-down macro photograph of loose premium long-grain Basmati rice grains spread on a rustic wooden surface, warm golden-hour lighting, rich earthy textures, shallow depth of field (rice-texture.dim_1200x800.png)",
+      "Minimalist corporate wordmark logo for 'AZAD NEXUS' in Deep Royal Blue and Gold. Clean sans-serif bold uppercase lettering, with a small abstract wheat stalk or grain icon integrated into the design, white background (azad-nexus-logo.dim_400x120.png)"
+    ],
+    "edits": []
+  }
+}

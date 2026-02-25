@@ -1,0 +1,214 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-build-a-multi-page-react-frontend-with-the-following-pages-home-products-quality-assurance-global-footprint-and-contact-inquiry-implement-a-client-side-router-react-router-with-a-persistent-top-navigation-bar-containing-the-azad-nexus-logo-wordmark-nav-links-to-all-pages-and-a-prominent-request-a-quote-cta-button",
+      "featureTitle": "Build a multi-page React frontend with the following pages: Home, Products, Quality Assurance, Global Footprint, and Contact/Inquiry. Implement a client-side router (React Router) with a persistent top navigation bar containing the AZAD NEXUS logo/wordmark, nav links to all pages, and a prominent 'Request a Quote' CTA button.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Navigation.tsx",
+        "frontend/src/pages/Contact.tsx",
+        "frontend/src/pages/GlobalFootprint.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/src/pages/Products.tsx",
+        "frontend/src/pages/QualityAssurance.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-design-the-entire-site-with-a-premium-minimalist-corporate-aesthetic-color-palette-deep-royal-blue-0a1f5c-or-similar-as-the-primary-brand-color-gold-warm-amber-c9a84c-or-similar-as-the-accent-and-abundant-white-space-with-off-white-backgrounds-typography-should-be-clean-and-professional-e-g-a-serif-display-font-for-headlines-sans-serif-for-body-apply-this-theme-consistently-across-all-pages-and-components",
+      "featureTitle": "Design the entire site with a premium, minimalist corporate aesthetic. Color palette: Deep Royal Blue (#0A1F5C or similar) as the primary brand color, Gold/Warm Amber (#C9A84C or similar) as the accent, and abundant white space with off-white backgrounds. Typography should be clean and professional (e.g., a serif display font for headlines, sans-serif for body). Apply this theme consistently across all pages and components.",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-home-page-with-the-following-sections-in-order-1-full-width-hero-section-featuring-the-hero-image-hero-split-dim-1920x1080-png-as-background-with-the-headline-connecting-india-s-finest-harvest-to-the-world-and-subheadline-premium-basmati-non-basmati-rice-sourced-direct-delivered-global-plus-dual-ctas-request-a-quote-and-explore-products-2-brief-about-us-summary-3-4-sentences-about-azad-nexus-as-a-trusted-indian-rice-exporter-3-featured-products-horizontal-slider-showcasing-3-4-key-rice-varieties-with-name-one-line-description-and-a-view-details-link-4-why-choose-us-section-with-three-cards-timely-delivery-competitive-pricing-direct-sourcing-each-with-an-icon-and-short-description-5-direct-from-farmers-section-with-a-short-paragraph-and-a-warm-illustrative-accent-emphasizing-farm-to-export-authenticity",
+      "featureTitle": "Build the Home page with the following sections in order: (1) Full-width hero section featuring the hero image (hero-split.dim_1920x1080.png) as background with the headline 'Connecting India's Finest Harvest to the World' and subheadline 'Premium Basmati & Non-Basmati Rice — Sourced Direct, Delivered Global', plus dual CTAs: 'Request a Quote' and 'Explore Products'; (2) Brief About Us summary (3–4 sentences about AZAD NEXUS as a trusted Indian rice exporter); (3) Featured Products horizontal slider showcasing 3–4 key rice varieties with name, one-line description, and a 'View Details' link; (4) 'Why Choose Us' section with three cards: Timely Delivery, Competitive Pricing, Direct Sourcing — each with an icon and short description; (5) 'Direct from Farmers' section with a short paragraph and a warm illustrative accent emphasizing farm-to-export authenticity.",
+      "files": [
+        "frontend/src/components/FeaturedProductsSlider.tsx",
+        "frontend/src/components/WhyChooseUsCard.tsx",
+        "frontend/src/pages/Home.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-products-page-with-two-categories-category-a-premium-basmati-varieties-1121-pusa-steam-and-category-b-non-basmati-varieties-long-grain-ir64-parboiled-each-product-card-must-display-product-name-a-short-description-and-a-specs-table-with-grain-length-mm-moisture-content-and-purity-include-a-tab-or-section-toggle-to-switch-between-the-two-categories",
+      "featureTitle": "Build the Products page with two categories: Category A — Premium Basmati (varieties: 1121, Pusa, Steam) and Category B — Non-Basmati (varieties: Long Grain, IR64, Parboiled). Each product card must display: product name, a short description, and a specs table with Grain Length (mm), Moisture Content (%), and Purity (%). Include a tab or section toggle to switch between the two categories.",
+      "files": [
+        "frontend/src/components/ProductCard.tsx",
+        "frontend/src/data/products.ts",
+        "frontend/src/pages/Products.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-quality-assurance-page-with-three-sections-1-certifications-display-placeholder-badge-cards-for-apeda-registration-and-iso-certification-each-with-a-logo-placeholder-slot-and-a-note-that-actual-credentials-will-be-updated-2-lab-testing-describe-the-testing-process-moisture-purity-grain-sizing-in-a-visually-structured-layout-e-g-numbered-steps-or-icon-list-3-packaging-standards-describe-export-grade-packaging-with-moisture-control-bags-and-labeling-compliance",
+      "featureTitle": "Build the Quality Assurance page with three sections: (1) Certifications — display placeholder badge cards for APEDA Registration and ISO Certification, each with a logo placeholder slot and a note that actual credentials will be updated; (2) Lab Testing — describe the testing process (moisture, purity, grain sizing) in a visually structured layout (e.g., numbered steps or icon list); (3) Packaging Standards — describe export-grade packaging with moisture-control bags and labeling compliance.",
+      "files": [
+        "frontend/src/components/CertificationBadge.tsx",
+        "frontend/src/pages/QualityAssurance.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-global-footprint-section-as-a-dedicated-page-section-or-standalone-page-use-a-card-grid-layout-to-highlight-the-following-export-markets-middle-east-europe-southeast-asia-and-africa-each-card-should-show-the-region-name-a-representative-icon-or-flag-cluster-and-one-line-describing-the-trade-relationship-or-key-buyer-type",
+      "featureTitle": "Build the Global Footprint section as a dedicated page section (or standalone page). Use a card/grid layout to highlight the following export markets: Middle East, Europe, Southeast Asia, and Africa. Each card should show the region name, a representative icon or flag cluster, and one line describing the trade relationship or key buyer type.",
+      "files": [
+        "frontend/src/components/RegionCard.tsx",
+        "frontend/src/pages/GlobalFootprint.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-contact-inquiry-page-with-a-lead-generation-form-containing-the-following-fields-full-name-text-company-name-text-country-text-or-select-rice-variety-select-1121-basmati-pusa-basmati-steam-basmati-long-grain-ir64-parboiled-quantity-in-mt-number-and-an-optional-message-field-the-form-cta-button-should-read-request-a-quote-on-submission-call-the-backend-to-store-the-inquiry-show-a-success-confirmation-message-upon-successful-submission",
+      "featureTitle": "Build the Contact/Inquiry page with a lead-generation form containing the following fields: Full Name (text), Company Name (text), Country (text or select), Rice Variety (select: 1121 Basmati, Pusa Basmati, Steam Basmati, Long Grain, IR64, Parboiled), Quantity in MT (number), and an optional Message field. The form CTA button should read 'Request a Quote'. On submission, call the backend to store the inquiry. Show a success confirmation message upon successful submission.",
+      "files": [
+        "frontend/src/pages/Contact.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-password-protected-admin-panel-page-route-admin-it-should-show-a-password-input-form-initially-on-correct-password-entry-fetch-and-display-all-submitted-inquiries-in-a-sortable-table-with-columns-id-name-company-country-rice-variety-quantity-mt-message-and-timestamp-the-admin-password-should-match-what-is-hardcoded-in-the-backend-include-a-logout-button-that-clears-the-session-and-returns-to-the-password-screen",
+      "featureTitle": "Build a password-protected Admin Panel page (route: /admin). It should show a password input form initially. On correct password entry, fetch and display all submitted inquiries in a sortable table with columns: ID, Name, Company, Country, Rice Variety, Quantity (MT), Message, and Timestamp. The admin password should match what is hardcoded in the backend. Include a 'Logout' button that clears the session and returns to the password screen.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/InquiriesTable.tsx",
+        "frontend/src/pages/Admin.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-seo-relevant-meta-tags-to-the-html-head-index-html-page-title-azad-nexus-premium-basmati-rice-exporter-from-india-meta-description-containing-keywords-premium-basmati-rice-exporter-indian-rice-supplier-bulk-rice-export-and-open-graph-tags-for-title-description-and-image",
+      "featureTitle": "Add SEO-relevant meta tags to the HTML head (index.html): page title 'AZAD NEXUS — Premium Basmati Rice Exporter from India', meta description containing keywords 'Premium Basmati Rice Exporter, Indian Rice Supplier, Bulk Rice Export', and Open Graph tags for title, description, and image.",
+      "files": [
+        "frontend/index.html"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-render-the-generated-hero-split-image-hero-split-dim-1920x1080-png-as-the-full-width-hero-background-on-the-home-page-render-the-rice-grain-texture-image-rice-texture-dim-1200x800-png-as-a-decorative-section-background-or-product-catalog-accent-render-the-azad-nexus-logo-azad-nexus-logo-dim-400x120-png-in-the-navigation-bar-and-footer-all-images-must-be-served-from-frontend-public-assets-generated",
+      "featureTitle": "Render the generated hero split image (hero-split.dim_1920x1080.png) as the full-width hero background on the Home page. Render the rice grain texture image (rice-texture.dim_1200x800.png) as a decorative section background or product catalog accent. Render the AZAD NEXUS logo (azad-nexus-logo.dim_400x120.png) in the navigation bar and footer. All images must be served from frontend/public/assets/generated/.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Navigation.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/src/pages/Products.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
