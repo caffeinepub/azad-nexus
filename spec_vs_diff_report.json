@@ -1,73 +1,34 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-25T23:52:52.697Z",
-  "summary": "The diff implements most of the required features: public website pages (Home, About, Services, Blog, Contact), admin panel with login, inquiry management, blog post management, services management, and a premium visual theme. However, the admin credential storage security is questionable — the backend stores what appears to be a hardcoded hash string as a Motoko let constant rather than using a proper hashing function at runtime. A 'Clear All' inquiries bulk-delete feature was also added without being requested, as were a WhatsApp floating button and individual blog post detail pages.",
-  "missing_requirements": [
+  "generatedAt": "2026-02-26T01:50:14.941Z",
+  "summary": "The diff implements all six requirements with high fidelity. Backend stable variables, validateAdmin, getInquiries with key validation, and submitInquiry are all present in main.mo. Frontend hooks (useAuth.ts, useQueries.ts), AdminLogin.tsx, and Admin.tsx are updated as required. One minor concern: the stored password appears to be compared as plain text in validateAdmin rather than as a true hash, but the spec's non-goals exclude frontend hashing and the AC only requires the stable variable to exist. The access key generation concatenates username+password+timestamp rather than a cryptographically random string, which is a weak implementation but not strictly prohibited by the spec. All AC items appear satisfied.",
+  "missing_requirements": [],
+  "hallucinated_features": [
     {
-      "id": "REQ-2",
-      "requirement": "Admin credentials must be stored securely in the backend — hashed, never in plaintext",
-      "reason": "In backend/main.mo, adminPasswordHash is stored as a plain Motoko string literal. There is no evidence of a proper hashing function being applied at runtime; the value is a hardcoded constant. The comment explicitly says 'Passwords are not needed in the backend as authorized users have already entered correct passwords', suggesting password verification logic may not be properly implemented with secure hashing.",
+      "description": "A migration.mo module was added and referenced in main.mo via 'with migration = Migration.run', introducing a migration framework not mentioned in the build request.",
+      "reason": "The build request makes no mention of a migration system or module. This is extra infrastructure beyond what was specified.",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "AccessControl and MixinAuthorization imports and usage retained in main.mo alongside the new access-key system, including isAdmin checks in getUserProfile.",
+      "reason": "The build request specifies the access key from validateAdmin is the sole auth mechanism for admin routes and that Internet Identity principals should not be used for admin authentication. The AccessControl framework usage was not requested.",
       "evidence": [
         "backend/main.mo"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Bulk 'Clear All' inquiries feature in the admin panel",
-      "reason": "The InquiriesManagement page includes a 'Clear All' button that deletes all inquiries at once via a useClearInquiries mutation. REQ-3 only asks for deleting individual inquiries.",
-      "evidence": [
-        "frontend/src/pages/InquiriesManagement.tsx",
-        "frontend/src/hooks/useQueries.ts"
-      ]
-    },
-    {
-      "description": "WhatsApp floating action button on all public pages",
-      "reason": "A sticky WhatsApp button was added to the public layout on all pages. This feature was not requested in any requirement.",
-      "evidence": [
-        "frontend/src/components/WhatsAppButton.tsx",
-        "frontend/src/App.tsx"
-      ]
-    },
-    {
-      "description": "Individual blog post detail page at /blog/$id",
-      "reason": "A BlogPost.tsx page and corresponding route /blog/$id was implemented allowing navigation to full blog post content. No requirement asked for individual blog post detail pages — REQ-1 and REQ-4 only require a blog list page displaying posts.",
-      "evidence": [
-        "frontend/src/pages/BlogPost.tsx",
-        "frontend/src/App.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.72,
+  "confidence": 0.82,
   "changed_files": [
     "backend/main.mo",
     "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
-    "frontend/src/components/FeaturedProductsSlider.tsx",
-    "frontend/src/components/Footer.tsx",
-    "frontend/src/components/Navigation.tsx",
-    "frontend/src/components/WhatsAppButton.tsx",
-    "frontend/src/hooks/useAdminAuth.ts",
+    "frontend/src/hooks/useAuth.ts",
     "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
-    "frontend/src/pages/About.tsx",
-    "frontend/src/pages/AccessDenied.tsx",
-    "frontend/src/pages/Admin.tsx",
-    "frontend/src/pages/AdminDashboard.tsx",
     "frontend/src/pages/AdminLogin.tsx",
-    "frontend/src/pages/Blog.tsx",
-    "frontend/src/pages/BlogManagement.tsx",
-    "frontend/src/pages/BlogPost.tsx",
-    "frontend/src/pages/BlogPostEditor.tsx",
-    "frontend/src/pages/Contact.tsx",
-    "frontend/src/pages/Home.tsx",
-    "frontend/src/pages/InquiriesManagement.tsx",
-    "frontend/src/pages/ServiceEditor.tsx",
-    "frontend/src/pages/Services.tsx",
-    "frontend/src/pages/ServicesManagement.tsx",
-    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

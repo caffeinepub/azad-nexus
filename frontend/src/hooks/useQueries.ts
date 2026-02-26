@@ -1,9 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { BlogPost, Service, Inquiry } from '../backend';
 
-// ── Inquiry Hooks ────────────────────────────────────────────────────────────
+const ADMIN_ACCESS_KEY = 'adminAccessKey';
 
+function getStoredAccessKey(): string {
+  return sessionStorage.getItem(ADMIN_ACCESS_KEY) ?? '';
+}
+
+// ── Submit Inquiry (open to all, no auth required) ────────────────────────────
 export function useSubmitInquiry() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -13,8 +17,10 @@ export function useSubmitInquiry() {
       name: string;
       company: string;
       country: string;
-      riceVariety: string;
-      quantityMT: number;
+      quantityMT: string;
+      riceCategory: string;
+      email: string;
+      phone: string;
       message: string;
     }) => {
       if (!actor) throw new Error('Actor not available');
@@ -22,9 +28,11 @@ export function useSubmitInquiry() {
         data.name,
         data.company,
         data.country,
-        data.riceVariety,
         data.quantityMT,
-        data.message
+        data.riceCategory,
+        data.email,
+        data.phone,
+        data.message,
       );
     },
     onSuccess: () => {
@@ -33,23 +41,57 @@ export function useSubmitInquiry() {
   });
 }
 
-export function useGetInquiries() {
-  const { actor, isFetching: actorFetching } = useActor();
+// ── Validate Admin (calls backend validateAdmin with username/password) ────────
+export function useValidateAdmin() {
+  const { actor } = useActor();
 
-  return useQuery<Inquiry[]>({
-    queryKey: ['inquiries'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getInquiries();
+  return useMutation({
+    mutationFn: async (credentials: { user: string; pass: string }): Promise<string | null> => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.validateAdmin(credentials.user, credentials.pass);
     },
-    enabled: !!actor && !actorFetching,
   });
 }
 
-export function useGetAllInquiries() {
-  return useGetInquiries();
+// ── Get Inquiries (admin-only, requires valid access key) ─────────────────────
+export function useGetInquiries() {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  return useQuery({
+    queryKey: ['inquiries'],
+    queryFn: async () => {
+      if (!actor) throw new Error('Actor not available');
+      const key = getStoredAccessKey();
+      if (!key) throw new Error('Unauthorized: No admin access key');
+      const result = await actor.getInquiries(key);
+      return result;
+    },
+    enabled: !!actor && !actorFetching,
+    staleTime: 0,
+    refetchOnMount: true,
+    retry: false,
+  });
 }
 
+// ── Mark Resolved ─────────────────────────────────────────────────────────────
+export function useMarkResolved() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: bigint) => {
+      if (!actor) throw new Error('Actor not available');
+      const key = getStoredAccessKey();
+      if (!key) throw new Error('Unauthorized: No admin access key');
+      return actor.markResolved(key, id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inquiries'] });
+    },
+  });
+}
+
+// ── Delete Inquiry ────────────────────────────────────────────────────────────
 export function useDeleteInquiry() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -57,7 +99,9 @@ export function useDeleteInquiry() {
   return useMutation({
     mutationFn: async (id: bigint) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.deleteInquiry(id);
+      const key = getStoredAccessKey();
+      if (!key) throw new Error('Unauthorized: No admin access key');
+      return actor.deleteInquiry(key, id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['inquiries'] });
@@ -65,166 +109,22 @@ export function useDeleteInquiry() {
   });
 }
 
-export function useClearInquiries() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async () => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.clearInquiries();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['inquiries'] });
-    },
-  });
-}
-
-// ── Blog Post Hooks ──────────────────────────────────────────────────────────
-
-export function useGetBlogPosts() {
-  const { actor, isFetching: actorFetching } = useActor();
-
-  return useQuery<BlogPost[]>({
-    queryKey: ['blogPosts'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getBlogPosts();
-    },
-    enabled: !!actor && !actorFetching,
-  });
-}
-
-export function useGetBlogPost(id: bigint | null) {
-  const { actor, isFetching: actorFetching } = useActor();
-
-  return useQuery<BlogPost | null>({
-    queryKey: ['blogPost', id?.toString()],
-    queryFn: async () => {
-      if (!actor || id === null) return null;
-      return actor.getBlogPost(id);
-    },
-    enabled: !!actor && !actorFetching && id !== null,
-  });
-}
-
-export function useCreateBlogPost() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      title: string;
-      content: string;
-      imageDescription: string;
-      publishedDate: string;
-    }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createBlogPost(data.title, data.content, data.imageDescription, data.publishedDate);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
-    },
-  });
-}
-
-export function useEditBlogPost() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      id: bigint;
-      title: string;
-      content: string;
-      imageDescription: string;
-      publishedDate: string;
-    }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.editBlogPost(data.id, data.title, data.content, data.imageDescription, data.publishedDate);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
-      queryClient.invalidateQueries({ queryKey: ['blogPost'] });
-    },
-  });
-}
-
-export function useDeleteBlogPost() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (id: bigint) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.deleteBlogPost(id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
-    },
-  });
-}
-
-// ── Service Hooks ────────────────────────────────────────────────────────────
-
-export function useGetServices() {
-  const { actor, isFetching: actorFetching } = useActor();
-
-  return useQuery<Service[]>({
-    queryKey: ['services'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getServices();
-    },
-    enabled: !!actor && !actorFetching,
-  });
-}
-
-export function useGetService(id: bigint | null) {
-  const { actor, isFetching: actorFetching } = useActor();
-
-  return useQuery<Service | null>({
-    queryKey: ['service', id?.toString()],
-    queryFn: async () => {
-      if (!actor || id === null) return null;
-      return actor.getService(id);
-    },
-    enabled: !!actor && !actorFetching && id !== null,
-  });
-}
-
-export function useEditService() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      id: bigint;
-      name: string;
-      description: string;
-      details: string;
-    }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.editService(data.id, data.name, data.description, data.details);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['services'] });
-      queryClient.invalidateQueries({ queryKey: ['service'] });
-    },
-  });
-}
-
-// ── Admin Auth Hooks ─────────────────────────────────────────────────────────
-
+// ── Is Caller Admin (kept for compatibility) ──────────────────────────────────
 export function useIsCallerAdmin() {
   const { actor, isFetching: actorFetching } = useActor();
 
-  return useQuery<boolean>({
+  return useQuery({
     queryKey: ['isCallerAdmin'],
     queryFn: async () => {
       if (!actor) return false;
-      return actor.isAdminLoggedIn();
+      try {
+        return await actor.isCallerAdmin();
+      } catch {
+        return false;
+      }
     },
     enabled: !!actor && !actorFetching,
+    staleTime: 0,
+    retry: false,
   });
 }

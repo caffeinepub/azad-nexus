@@ -1,12 +1,115 @@
 {
   "kind": "build_request",
-  "title": "Build Azad Nexus Global Rice Export Business Website with Admin Panel",
-  "projectName": "Azad Nexus Global",
-  "priority": "normal",
+  "title": "Username/Password Admin Login with Access Key Session",
+  "projectName": "Azad Nexus",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Build a full public-facing business website for 'Azad Nexus Global', a rice export company that exports rice from India to other countries. The site must include the following pages: Home (hero section highlighting rice exports from India, key stats, CTAs), About (company story, mission, expertise in Indian rice exports), Services (types of rice exported, quality standards, export process), Blog (list of articles/news about the rice export industry), and Contact (inquiry form for potential buyers and partners with fields for name, company, country, rice variety, quantity, and message).",
+      "text": "In the Motoko backend, add stable variables to store the admin username (azadnexus.global@gmail.com) and a hashed version of the admin password (Karusu_7). Add a `validateAdmin(user: Text, pass: Text) : async ?Text` function that compares the provided credentials against the stored values and, on a match, generates a unique access key (a long random string), stores it in a stable variable, and returns it. If credentials do not match, return null.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-8",
+          "msg-9"
+        ],
+        "quotes": [
+          "create a stable variable that stores my admin_username and a hashed version of my admin_password",
+          "Create a function called validateAdmin(user, pass) function in the backend. If the inputs match my stored credentials, return a unique 'Access Key'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Stable variables for admin_username and hashed admin_password exist in the actor.",
+        "Calling validateAdmin with correct credentials returns a non-null unique access key string.",
+        "Calling validateAdmin with incorrect credentials returns null.",
+        "The generated access key is stored in a stable variable so it persists across queries within the session."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the `getInquiries` backend function signature to `getInquiries(key: Text) : async [Inquiry]`. Replace the existing Internet Identity principal check (`caller != admin`) with a check that validates the provided `key` against the stored access key. If the key matches, return all inquiries. If it does not match, return an empty array or trap with an error.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-8",
+          "msg-9"
+        ],
+        "quotes": [
+          "Update the getInquiries(key) function so it only returns data if the 'Access Key' provided matches the one generated at login",
+          "Remove the caller != admin check and replace it with a check for my specific login session"
+        ]
+      },
+      "acceptanceCriteria": [
+        "getInquiries(key) returns the full inquiries list when a valid access key is provided.",
+        "getInquiries(key) returns an empty array or an error when an invalid or empty key is provided.",
+        "No Internet Identity principal check remains in getInquiries."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Ensure `submitInquiry` (the customer-facing form submission function) remains publicly callable with no authentication requirement — no access key and no principal check. The function signature and behaviour must remain unchanged for anonymous callers.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-9",
+          "msg-10"
+        ],
+        "quotes": [
+          "submitInquiry(...) remains publicly callable for the customer-facing form",
+          "Ensure the customer-facing form still works and correctly sends data to the backend"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Any unauthenticated user can call submitInquiry and have their inquiry stored.",
+        "The Contact page form submits successfully and shows the success state after submission."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Update the `AdminLogin.tsx` page so that on form submission it calls the backend `validateAdmin(user, pass)` function directly (without Internet Identity). If a non-null access key is returned, save it to `sessionStorage` under a key such as `adminAccessKey`, then redirect to the `/admin` dashboard. If null is returned, display an 'Invalid credentials' error message.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8",
+          "msg-9",
+          "msg-10"
+        ],
+        "quotes": [
+          "On my Admin Login page, when I enter my email and password, call the validateAdmin function. If it's a match, save that 'Access Key' in the browser's memory for that session",
+          "Provide the login page logic that saves the access key to sessionStorage"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting correct credentials saves the access key to sessionStorage and navigates to /admin.",
+        "Submitting incorrect credentials shows an inline error and does not navigate.",
+        "No Internet Identity login prompt appears on the admin login page."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Update the `Admin.tsx` dashboard page so that it reads the access key from `sessionStorage` on load. Pass that access key when calling the backend `getInquiries(key)` function. If no access key is found in sessionStorage, redirect the user to `/admin/login`. Remove any Internet Identity principal-based access control from this page. The dashboard must still display the inquiries table with 'Mark Resolved' and 'Delete' actions; update those backend calls to use access-key auth if they also have principal checks.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8",
+          "msg-9",
+          "msg-10"
+        ],
+        "quotes": [
+          "Admin Dashboard that uses that key to fetch the inquiries",
+          "No More 'Access Denied': Remove the caller != admin check"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard reads the access key from sessionStorage and passes it to getInquiries.",
+        "Inquiries are displayed correctly when a valid access key is present.",
+        "Visiting /admin without a sessionStorage key redirects to /admin/login.",
+        "The 'Access Denied' error no longer appears for a logged-in admin."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Update the `useAuth.ts` hook and `useQueries.ts` hooks so that admin query functions (getInquiries, markResolved, deleteInquiry) read the access key from `sessionStorage` and pass it as a parameter to the backend. Remove reliance on Internet Identity identity/actor for admin operations. The `useActor` hook may still be used for anonymous calls like submitInquiry.",
       "target": "frontend",
       "source": {
         "messageIds": [
@@ -14,143 +117,30 @@
           "msg-9"
         ],
         "quotes": [
-          "Export we export rice from India to others countries.",
-          "Business site"
+          "Don't use Internet Identity Principals for this. Treat it like a traditional website login."
         ]
       },
       "acceptanceCriteria": [
-        "Home page renders with a hero section, key highlights about rice exports, and CTA buttons",
-        "About page describes the company, its mission, and expertise in exporting rice from India",
-        "Services page lists types of rice exported, quality standards, and the export process",
-        "Blog page displays a list of blog posts (fetched from backend)",
-        "Contact page includes a form with fields: name, company, country, rice variety, quantity, message and submits successfully to the backend",
-        "Navigation links work correctly between all pages",
-        "Footer displays company contact details and social links"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Implement a secure admin panel login system using username and password. Admin credentials (username: azadnexus.global@gmail.com, password: Karusu_7) must be stored securely in the backend (hashed, not plaintext). The admin panel must be accessible only after successful login with these credentials. Show an 'Access Denied' page for unauthenticated access attempts with a link back to the public site.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-6",
-          "msg-8"
-        ],
-        "quotes": [
-          "Ok we will access the admin panel dashboard with username and password",
-          "Username is azadnexus.global@gmail.com and password is Karusu_7"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin login page renders at /admin with username and password fields",
-        "Submitting correct credentials grants access to the admin dashboard",
-        "Submitting incorrect credentials shows an error message",
-        "Credentials are stored securely (hashed) in the backend",
-        "Unauthenticated access to admin routes redirects to the login page or shows Access Denied",
-        "Admin can sign out and is returned to the public website"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Build an admin dashboard that allows the admin to view and manage all contact form inquiry submissions. The dashboard must display inquiries in a table with columns for name, company, country, rice variety, quantity, message, and submission timestamp. Admin must be able to delete individual inquiries.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-8"
-        ],
-        "quotes": [
-          "yeah all managing inquires contact form submission"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin dashboard shows a table of all submitted inquiries",
-        "Table columns include: name, company, country, rice variety, quantity, message, timestamp",
-        "Admin can delete an individual inquiry",
-        "Inquiry list updates after deletion without requiring a page reload",
-        "Empty state is shown when no inquiries exist"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Build a blog post management feature in the admin panel. The admin must be able to create new blog posts (title, content, optional image description, published date), edit existing blog posts, and delete blog posts. Published blog posts must appear on the public Blog page.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-8"
-        ],
-        "quotes": [
-          "managing blog post"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel includes a 'Blog Posts' section listing all posts",
-        "Admin can create a new blog post with title, content, and published date",
-        "Admin can edit any existing blog post",
-        "Admin can delete any blog post",
-        "Published blog posts appear on the public /blog page",
-        "Blog posts are persisted in the backend"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Build a services management feature in the admin panel. The admin must be able to edit existing service listings (name, description, details). Changes made in the admin panel must be reflected on the public Services page.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-8"
-        ],
-        "quotes": [
-          "edit service"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel includes a 'Services' section listing all services",
-        "Admin can edit service name, description, and details",
-        "Changes saved by admin are immediately reflected on the public Services page",
-        "Services data is persisted in the backend"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Apply a premium, professional visual theme across the entire public website consistent with a high-quality Indian rice export brand. Use a warm, elegant color palette (deep greens, golds, creams) evoking quality grain and agricultural excellence. Use clean, modern typography and a layout that communicates trust, professionalism, and global reach. Apply the theme consistently across all pages including navigation, footer, cards, buttons, and forms.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-8"
-        ],
-        "quotes": [
-          "Export we export rice from India to others countries."
-        ]
-      },
-      "acceptanceCriteria": [
-        "All pages use a consistent color palette (warm greens, golds, creams)",
-        "Typography is clean and professional throughout",
-        "Navigation, footer, cards, and buttons all follow the same visual theme",
-        "The design communicates trust and global professionalism appropriate for a B2B export business"
+        "useAuth hook provides login, logout, and isAuthenticated functions based on sessionStorage access key.",
+        "Admin query hooks pass the sessionStorage access key to all admin backend calls.",
+        "Logout clears the access key from sessionStorage and redirects to /admin/login."
       ]
     }
   ],
   "constraints": [
-    "Admin credentials (azadnexus.global@gmail.com / Karusu_7) must be stored securely in the backend — hashed, never in plaintext",
-    "Do not use Internet Identity for admin authentication — use username/password login only",
-    "All Motoko logic must remain in the single backend/main.mo actor"
+    "Do not use Internet Identity principals for admin authentication — the access key from validateAdmin is the sole auth mechanism for admin routes.",
+    "The customer-facing submitInquiry function must remain publicly accessible without any authentication.",
+    "Access key must be stored in sessionStorage (not localStorage) on the frontend.",
+    "All Motoko logic must remain in the single backend/main.mo actor file."
   ],
   "nonGoals": [
-    "E-commerce or payment processing",
-    "Multi-admin or role-based access control",
-    "Real-time chat or WebSocket features",
-    "Third-party email delivery for inquiry notifications",
-    "Customer-facing user accounts or authentication"
+    "Multi-admin support or admin role management.",
+    "Cryptographic hashing of the password on the frontend before sending to the backend.",
+    "Changing the customer-facing Contact page UI or inquiry form fields.",
+    "Migrating to a different authentication system (e.g., Internet Identity) in this iteration."
   ],
   "imageRequirements": {
-    "required": [
-      "Hero banner showing golden rice grains and lush green paddy fields under warm sunlight, wide landscape format (hero-rice-banner.dim_1920x800.png)",
-      "About page background image showing traditional Indian rice farming with workers in paddy fields (about-farming.dim_1200x600.png)",
-      "Azad Nexus Global logo mark — a stylized golden rice stalk with a globe motif, on transparent background (logo-azad-nexus.dim_400x120.png)",
-      "Rice variety showcase image showing assorted premium rice grains in elegant wooden bowls on a dark surface (rice-varieties.dim_800x500.png)",
-      "Quality assurance illustration showing lab testing equipment and quality certification symbols with rice (quality-assurance.dim_800x500.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

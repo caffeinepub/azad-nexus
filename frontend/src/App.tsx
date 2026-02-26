@@ -1,42 +1,18 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  createRootRoute,
-  createRoute,
-  createRouter,
-  RouterProvider,
-  Outlet,
-} from '@tanstack/react-router';
+import { createRootRoute, createRoute, createRouter, RouterProvider, Outlet, Link } from '@tanstack/react-router';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
+import Products from './pages/Products';
+import QualityAssurance from './pages/QualityAssurance';
+import GlobalFootprint from './pages/GlobalFootprint';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import InquiriesManagement from './pages/InquiriesManagement';
-import BlogManagement from './pages/BlogManagement';
-import BlogPostEditor from './pages/BlogPostEditor';
-import ServicesManagement from './pages/ServicesManagement';
-import ServiceEditor from './pages/ServiceEditor';
-import AccessDenied from './pages/AccessDenied';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 1,
-    },
-  },
-});
-
-// Public layout with Navigation + Footer
-function PublicLayout() {
+function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-cream">
       <Navigation />
       <main className="flex-1">
         <Outlet />
@@ -47,143 +23,33 @@ function PublicLayout() {
   );
 }
 
-// Admin layout without public nav/footer
-function AdminLayout() {
-  return (
-    <div className="min-h-screen bg-cream-50">
-      <Outlet />
+const rootRoute = createRootRoute({
+  component: Layout,
+  notFoundComponent: () => (
+    <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+      <h1 className="font-display text-5xl font-bold text-royal mb-4">404</h1>
+      <p className="text-muted-foreground mb-8 font-body">Page not found.</p>
+      <Link to="/" className="text-gold font-semibold hover:underline">Return Home</Link>
     </div>
-  );
-}
-
-// Root route
-const rootRoute = createRootRoute();
-
-// Layout routes
-const publicLayoutRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  id: 'public-layout',
-  component: PublicLayout,
+  )
 });
 
-const adminLayoutRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  id: 'admin-layout',
-  component: AdminLayout,
-});
-
-// Public routes
-const homeRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/',
-  component: Home,
-});
-
-const aboutRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/about',
-  component: About,
-});
-
-const servicesRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/services',
-  component: Services,
-});
-
-const blogRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/blog',
-  component: Blog,
-});
-
-const blogPostRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/blog/$id',
-  component: BlogPost,
-});
-
-const contactRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/contact',
-  component: Contact,
-});
-
-const accessDeniedRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/access-denied',
-  component: AccessDenied,
-});
-
-// Admin routes
-const adminLoginRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin',
-  component: AdminLogin,
-});
-
-const adminDashboardRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/dashboard',
-  component: AdminDashboard,
-});
-
-const adminInquiriesRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/inquiries',
-  component: InquiriesManagement,
-});
-
-const adminBlogRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/blog',
-  component: BlogManagement,
-});
-
-const adminBlogNewRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/blog/new',
-  component: BlogPostEditor,
-});
-
-const adminBlogEditRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/blog/edit/$id',
-  component: BlogPostEditor,
-});
-
-const adminServicesRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/services',
-  component: ServicesManagement,
-});
-
-const adminServiceEditRoute = createRoute({
-  getParentRoute: () => adminLayoutRoute,
-  path: '/admin/services/edit/$id',
-  component: ServiceEditor,
-});
+const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: Home });
+const productsRoute = createRoute({ getParentRoute: () => rootRoute, path: '/products', component: Products });
+const qualityRoute = createRoute({ getParentRoute: () => rootRoute, path: '/quality', component: QualityAssurance });
+const globalRoute = createRoute({ getParentRoute: () => rootRoute, path: '/global-footprint', component: GlobalFootprint });
+const contactRoute = createRoute({ getParentRoute: () => rootRoute, path: '/contact', component: Contact });
+const adminRoute = createRoute({ getParentRoute: () => rootRoute, path: '/admin', component: Admin });
+const adminLoginRoute = createRoute({ getParentRoute: () => rootRoute, path: '/admin/login', component: AdminLogin });
 
 const routeTree = rootRoute.addChildren([
-  publicLayoutRoute.addChildren([
-    homeRoute,
-    aboutRoute,
-    servicesRoute,
-    blogRoute,
-    blogPostRoute,
-    contactRoute,
-    accessDeniedRoute,
-  ]),
-  adminLayoutRoute.addChildren([
-    adminLoginRoute,
-    adminDashboardRoute,
-    adminInquiriesRoute,
-    adminBlogRoute,
-    adminBlogNewRoute,
-    adminBlogEditRoute,
-    adminServicesRoute,
-    adminServiceEditRoute,
-  ]),
+  homeRoute,
+  productsRoute,
+  qualityRoute,
+  globalRoute,
+  contactRoute,
+  adminRoute,
+  adminLoginRoute,
 ]);
 
 const router = createRouter({ routeTree });
@@ -195,9 +61,5 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
+  return <RouterProvider router={router} />;
 }

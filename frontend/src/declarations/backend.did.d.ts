@@ -10,143 +10,41 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface BlogPost {
-  'id' : bigint,
-  'title' : string,
-  'content' : string,
-  'imageDescription' : string,
-  'publishedDate' : string,
-  'timestamp' : bigint,
-}
 export interface Inquiry {
   'id' : bigint,
-  'riceVariety' : string,
+  'status' : InquiryStatus,
   'country' : string,
+  'riceCategory' : string,
   'name' : string,
+  'submittedAt' : bigint,
+  'email' : string,
   'company' : string,
   'message' : string,
-  'timestamp' : bigint,
-  'quantityMT' : number,
+  'phone' : string,
+  'quantityMT' : string,
 }
-export interface Service {
-  'id' : bigint,
-  'name' : string,
-  'description' : string,
-  'details' : string,
-}
-export interface UserProfile { 'name' : string }
+export type InquiryStatus = { 'resolved' : null } |
+  { 'pending' : null };
+export interface UserProfile { 'name' : string, 'email' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
-export interface _CaffeineStorageCreateCertificateResult {
-  'method' : string,
-  'blob_hash' : string,
-}
-export interface _CaffeineStorageRefillInformation {
-  'proposed_top_up_amount' : [] | [bigint],
-}
-export interface _CaffeineStorageRefillResult {
-  'success' : [] | [boolean],
-  'topped_up_amount' : [] | [bigint],
-}
 export interface _SERVICE {
-  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
-  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
-  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
-    [Array<Uint8Array>],
-    undefined
-  >,
-  '_caffeineStorageCreateCertificate' : ActorMethod<
-    [string],
-    _CaffeineStorageCreateCertificateResult
-  >,
-  '_caffeineStorageRefillCashier' : ActorMethod<
-    [[] | [_CaffeineStorageRefillInformation]],
-    _CaffeineStorageRefillResult
-  >,
-  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
-  /**
-   * / Attempt admin login. On success, assigns the #admin role to the caller's principal.
-   * / The caller must not be anonymous (anonymous principals cannot hold roles).
-   */
-  'adminLogin' : ActorMethod<[string, string], boolean>,
-  /**
-   * / Revoke admin role from the caller (logout).
-   */
-  'adminLogout' : ActorMethod<[], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  /**
-   * / Clear all inquiries. Admin-only.
-   */
-  'clearInquiries' : ActorMethod<[], undefined>,
-  /**
-   * / Create a new blog post. Admin-only.
-   */
-  'createBlogPost' : ActorMethod<[string, string, string, string], bigint>,
-  /**
-   * / Create a new service listing. Admin-only.
-   */
-  'createService' : ActorMethod<[string, string, string], bigint>,
-  /**
-   * / Delete a blog post. Admin-only.
-   */
-  'deleteBlogPost' : ActorMethod<[bigint], undefined>,
-  /**
-   * / Delete an individual inquiry by ID. Admin-only.
-   */
-  'deleteInquiry' : ActorMethod<[bigint], undefined>,
-  /**
-   * / Delete a service listing. Admin-only.
-   */
-  'deleteService' : ActorMethod<[bigint], undefined>,
-  /**
-   * / Edit an existing blog post. Admin-only.
-   */
-  'editBlogPost' : ActorMethod<
-    [bigint, string, string, string, string],
-    undefined
-  >,
-  /**
-   * / Edit an existing service listing. Admin-only.
-   */
-  'editService' : ActorMethod<[bigint, string, string, string], undefined>,
-  /**
-   * / Retrieve a single blog post by ID. Public.
-   */
-  'getBlogPost' : ActorMethod<[bigint], [] | [BlogPost]>,
-  /**
-   * / Retrieve all published blog posts. Public.
-   */
-  'getBlogPosts' : ActorMethod<[], Array<BlogPost>>,
+  'deleteInquiry' : ActorMethod<[string, bigint], undefined>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  /**
-   * / Retrieve all inquiries. Admin-only.
-   */
-  'getInquiries' : ActorMethod<[], Array<Inquiry>>,
-  /**
-   * / Retrieve a single service by ID. Public.
-   */
-  'getService' : ActorMethod<[bigint], [] | [Service]>,
-  /**
-   * / Retrieve all services. Public.
-   */
-  'getServices' : ActorMethod<[], Array<Service>>,
+  'getInquiries' : ActorMethod<[string], Array<Inquiry>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
-  /**
-   * / Check whether the caller currently holds the admin role.
-   */
-  'isAdminLoggedIn' : ActorMethod<[], boolean>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'markResolved' : ActorMethod<[string, bigint], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
-  /**
-   * / Submit a new inquiry. Open to any caller (including guests).
-   */
   'submitInquiry' : ActorMethod<
-    [string, string, string, string, number, string],
-    bigint
+    [string, string, string, string, string, string, string, string],
+    undefined
   >,
+  'validateAdmin' : ActorMethod<[string, string], [] | [string]>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

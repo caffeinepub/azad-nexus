@@ -1,307 +1,331 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useSubmitInquiry } from '../hooks/useQueries';
+import { MapPin, Phone, Mail, Clock, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-const riceVarieties = [
-  'Basmati 1121',
-  'Pusa Basmati',
-  'Steam Basmati',
-  'Traditional Basmati',
-  'IR-64 Parboiled',
-  'Long Grain White',
-  'Sona Masoori',
+const RICE_CATEGORIES = [
+  '1121 Basmati Rice',
+  'Pusa Basmati Rice',
+  'IR64 Parboiled Rice',
+  'Long Grain White Rice',
+  'Steam Basmati Rice',
   'Other',
 ];
 
+interface FormData {
+  name: string;
+  company: string;
+  country: string;
+  riceCategory: string;
+  quantityMT: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+const INITIAL_FORM: FormData = {
+  name: '',
+  company: '',
+  country: '',
+  riceCategory: '',
+  quantityMT: '',
+  email: '',
+  phone: '',
+  message: '',
+};
+
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: '',
-    company: '',
-    country: '',
-    riceVariety: '',
-    quantityMT: '',
-    message: '',
-  });
+  const [form, setForm] = useState<FormData>(INITIAL_FORM);
+  const [errors, setErrors] = useState<Partial<FormData>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
 
   const submitInquiry = useSubmitInquiry();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setError('');
+  const validate = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+    if (!form.name.trim() || form.name.trim().length < 2)
+      newErrors.name = 'Name must be at least 2 characters.';
+    if (!form.company.trim() || form.company.trim().length < 2)
+      newErrors.company = 'Company name must be at least 2 characters.';
+    if (!form.country.trim() || form.country.trim().length < 2)
+      newErrors.country = 'Country must be at least 2 characters.';
+    if (!form.riceCategory) newErrors.riceCategory = 'Please select a rice category.';
+    if (!form.quantityMT.trim() || isNaN(parseFloat(form.quantityMT)) || parseFloat(form.quantityMT) <= 0)
+      newErrors.quantityMT = 'Quantity must be a positive number.';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
+      newErrors.email = 'Please enter a valid email address.';
+    if (!form.phone.trim() || form.phone.trim().length < 7)
+      newErrors.phone = 'Please enter a valid phone number.';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
-    if (!form.name || !form.company || !form.country || !form.riceVariety || !form.quantityMT || !form.message) {
-      setError('Please fill in all required fields.');
-      return;
-    }
-
-    const qty = parseFloat(form.quantityMT);
-    if (isNaN(qty) || qty <= 0) {
-      setError('Please enter a valid quantity greater than 0.');
-      return;
-    }
+    if (!validate()) return;
 
     try {
       await submitInquiry.mutateAsync({
-        name: form.name,
-        company: form.company,
-        country: form.country,
-        riceVariety: form.riceVariety,
-        quantityMT: qty,
-        message: form.message,
+        name: form.name.trim(),
+        company: form.company.trim(),
+        country: form.country.trim(),
+        quantityMT: form.quantityMT.trim(),
+        riceCategory: form.riceCategory,
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        message: form.message.trim(),
       });
       setSubmitted(true);
-    } catch (err: any) {
-      setError(err?.message || 'Failed to submit inquiry. Please try again.');
+    } catch {
+      // Error is handled via submitInquiry.error
     }
   };
 
-  return (
-    <div className="bg-cream-50">
-      {/* Hero */}
-      <section className="py-20 bg-green-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-gold-300 font-semibold text-sm uppercase tracking-widest font-body">Get In Touch</span>
-          <h1 className="font-display text-5xl font-bold text-white mt-3 mb-6">
-            Request a Quote
-          </h1>
-          <p className="text-cream-200 text-lg max-w-2xl mx-auto font-body">
-            Ready to source premium Indian rice? Fill out the form below and our export team 
-            will get back to you within 24 hours.
-          </p>
+  const handleReset = () => {
+    setForm(INITIAL_FORM);
+    setErrors({});
+    setSubmitted(false);
+    submitInquiry.reset();
+  };
+
+  if (submitted) {
+    return (
+      <main className="min-h-screen bg-background py-16 px-4">
+        <div className="max-w-lg mx-auto text-center space-y-6">
+          <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
+            <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Inquiry Submitted!</h2>
+            <p className="text-muted-foreground mt-2">
+              Thank you for reaching out. Our team will contact you within 24 hours with a tailored
+              quote.
+            </p>
+          </div>
+          <Button onClick={handleReset} variant="outline">
+            Submit Another Inquiry
+          </Button>
         </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-background">
+      {/* Hero Banner */}
+      <section className="bg-navy py-14 px-4 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">Contact Us</h1>
+        <p className="text-white/70 max-w-xl mx-auto text-sm sm:text-base">
+          Ready to source premium rice? Fill out the form below and our team will respond within 24
+          hours with a tailored quote.
+        </p>
       </section>
 
-      {/* Contact Banner */}
-      <div className="bg-gold-500 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-center gap-8">
-          <a href="tel:+917058779219" className="flex items-center gap-2 text-green-900 font-semibold font-body hover:text-green-700 transition-colors">
-            <Phone size={16} />
-            +91 70587 79219
-          </a>
-          <a href="mailto:azadnexus.global@gmail.com" className="flex items-center gap-2 text-green-900 font-semibold font-body hover:text-green-700 transition-colors">
-            <Mail size={16} />
-            azadnexus.global@gmail.com
-          </a>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Contact Info Sidebar */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="font-display text-2xl font-bold text-green-800 mb-6">Contact Information</h2>
+      <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Sidebar */}
+        <aside className="space-y-6">
+          <div className="bg-card border border-border rounded-lg p-6 space-y-5">
+            <h2 className="text-lg font-semibold text-foreground">Get in Touch</h2>
+            <div className="space-y-4 text-sm text-muted-foreground">
+              <div className="flex gap-3">
+                <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>Mumbai, Maharashtra, India</span>
               </div>
-              <div className="bg-white rounded-xl p-6 border border-cream-200 space-y-5">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <MapPin size={18} className="text-green-700" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Location</p>
-                    <p className="text-muted-foreground text-sm font-body leading-relaxed">
-                      Akurdi near Khandoba Mandir,<br />
-                      Pimpri Chinchwad, Pune 411035,<br />
-                      Maharashtra, India
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Mail size={18} className="text-green-700" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Email</p>
-                    <a href="mailto:azadnexus.global@gmail.com" className="text-green-700 hover:text-gold-600 text-sm font-body transition-colors">
-                      azadnexus.global@gmail.com
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Phone size={18} className="text-green-700" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Phone / WhatsApp</p>
-                    <a href="tel:+917058779219" className="text-green-700 hover:text-gold-600 text-sm font-body transition-colors">
-                      +91 70587 79219
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Clock size={18} className="text-green-700" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Business Hours</p>
-                    <p className="text-muted-foreground text-sm font-body">
-                      Mon–Sat: 9:00 AM – 6:00 PM IST
-                    </p>
-                  </div>
-                </div>
+              <div className="flex gap-3">
+                <Phone className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>+91 70587 79219</span>
               </div>
-            </div>
-
-            {/* Inquiry Form */}
-            <div className="lg:col-span-2">
-              {submitted ? (
-                <div className="bg-white rounded-2xl p-12 border border-cream-200 text-center">
-                  <CheckCircle size={64} className="text-green-500 mx-auto mb-6" />
-                  <h2 className="font-display text-3xl font-bold text-green-800 mb-4">
-                    Inquiry Submitted!
-                  </h2>
-                  <p className="text-muted-foreground font-body text-lg mb-8">
-                    Thank you for your inquiry. Our export team will review your requirements 
-                    and get back to you within 24 hours.
-                  </p>
-                  <button
-                    onClick={() => { setSubmitted(false); setForm({ name: '', company: '', country: '', riceVariety: '', quantityMT: '', message: '' }); }}
-                    className="px-6 py-3 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-md transition-colors font-body"
-                  >
-                    Submit Another Inquiry
-                  </button>
-                </div>
-              ) : (
-                <div className="bg-white rounded-2xl p-8 border border-cream-200">
-                  <h2 className="font-display text-2xl font-bold text-green-800 mb-6">
-                    Send Us Your Requirements
-                  </h2>
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <Label htmlFor="name" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                          Full Name *
-                        </Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={form.name}
-                          onChange={handleChange}
-                          placeholder="Your full name"
-                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="company" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                          Company Name *
-                        </Label>
-                        <Input
-                          id="company"
-                          name="company"
-                          value={form.company}
-                          onChange={handleChange}
-                          placeholder="Your company name"
-                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <Label htmlFor="country" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                          Country *
-                        </Label>
-                        <Input
-                          id="country"
-                          name="country"
-                          value={form.country}
-                          onChange={handleChange}
-                          placeholder="Your country"
-                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="riceVariety" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                          Rice Variety *
-                        </Label>
-                        <select
-                          id="riceVariety"
-                          name="riceVariety"
-                          value={form.riceVariety}
-                          onChange={handleChange}
-                          className="w-full h-10 px-3 rounded-md border border-cream-300 bg-white text-sm font-body focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          required
-                        >
-                          <option value="">Select a variety</option>
-                          {riceVarieties.map((v) => (
-                            <option key={v} value={v}>{v}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="quantityMT" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                        Quantity (Metric Tons) *
-                      </Label>
-                      <Input
-                        id="quantityMT"
-                        name="quantityMT"
-                        type="number"
-                        min="0.1"
-                        step="0.1"
-                        value={form.quantityMT}
-                        onChange={handleChange}
-                        placeholder="e.g. 25"
-                        className="border-cream-300 focus:border-green-500 focus:ring-green-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="message" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
-                        Message / Requirements *
-                      </Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={form.message}
-                        onChange={handleChange}
-                        placeholder="Please describe your requirements, packaging preferences, delivery port, etc."
-                        rows={5}
-                        className="border-cream-300 focus:border-green-500 focus:ring-green-500 resize-none"
-                        required
-                      />
-                    </div>
-                    {error && (
-                      <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm font-body">
-                        {error}
-                      </div>
-                    )}
-                    <Button
-                      type="submit"
-                      disabled={submitInquiry.isPending}
-                      className="w-full bg-gold-500 hover:bg-gold-400 text-green-900 font-semibold py-3 rounded-md transition-colors font-body"
-                    >
-                      {submitInquiry.isPending ? (
-                        <span className="flex items-center gap-2">
-                          <span className="w-4 h-4 border-2 border-green-900/30 border-t-green-900 rounded-full animate-spin" />
-                          Submitting...
-                        </span>
-                      ) : (
-                        'Submit Inquiry'
-                      )}
-                    </Button>
-                  </form>
-                </div>
-              )}
+              <div className="flex gap-3">
+                <Mail className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>info@azadnexus.com</span>
+              </div>
+              <div className="flex gap-3">
+                <Clock className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>Mon–Sat, 9:00 AM – 6:00 PM IST</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+
+          <div className="bg-gold/10 border border-gold/30 rounded-lg p-5 text-sm text-foreground space-y-2">
+            <p className="font-semibold text-gold">Why Choose AZAD NEXUS?</p>
+            <ul className="space-y-1 text-muted-foreground list-disc list-inside">
+              <li>Premium quality rice varieties</li>
+              <li>Competitive export pricing</li>
+              <li>Reliable global shipping</li>
+              <li>Dedicated account managers</li>
+            </ul>
+          </div>
+        </aside>
+
+        {/* Form */}
+        <section className="lg:col-span-2">
+          <div className="bg-card border border-border rounded-lg p-6 sm:p-8">
+            <h2 className="text-xl font-semibold text-foreground mb-6">Request a Quote</h2>
+
+            {submitInquiry.isError && (
+              <div className="mb-5 p-4 rounded-md bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+                {submitInquiry.error instanceof Error
+                  ? submitInquiry.error.message
+                  : 'Something went wrong. Please try again.'}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* Name */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="name">Full Name *</Label>
+                  <Input
+                    id="name"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    placeholder="John Smith"
+                    className={errors.name ? 'border-destructive' : ''}
+                  />
+                  {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                </div>
+
+                {/* Company */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="company">Company Name *</Label>
+                  <Input
+                    id="company"
+                    value={form.company}
+                    onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
+                    placeholder="Acme Trading Co."
+                    className={errors.company ? 'border-destructive' : ''}
+                  />
+                  {errors.company && <p className="text-xs text-destructive">{errors.company}</p>}
+                </div>
+
+                {/* Country */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="country">Country *</Label>
+                  <Input
+                    id="country"
+                    value={form.country}
+                    onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
+                    placeholder="United Arab Emirates"
+                    className={errors.country ? 'border-destructive' : ''}
+                  />
+                  {errors.country && <p className="text-xs text-destructive">{errors.country}</p>}
+                </div>
+
+                {/* Rice Category */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="riceCategory">Category of Rice *</Label>
+                  <Select
+                    value={form.riceCategory}
+                    onValueChange={(v) => setForm((f) => ({ ...f, riceCategory: v }))}
+                  >
+                    <SelectTrigger
+                      id="riceCategory"
+                      className={errors.riceCategory ? 'border-destructive' : ''}
+                    >
+                      <SelectValue placeholder="Select category…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {RICE_CATEGORIES.map((v) => (
+                        <SelectItem key={v} value={v}>
+                          {v}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.riceCategory && (
+                    <p className="text-xs text-destructive">{errors.riceCategory}</p>
+                  )}
+                </div>
+
+                {/* Quantity */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="quantityMT">Quantity (Metric Tons) *</Label>
+                  <Input
+                    id="quantityMT"
+                    type="number"
+                    min="0.1"
+                    step="0.1"
+                    value={form.quantityMT}
+                    onChange={(e) => setForm((f) => ({ ...f, quantityMT: e.target.value }))}
+                    placeholder="e.g. 25"
+                    className={errors.quantityMT ? 'border-destructive' : ''}
+                  />
+                  {errors.quantityMT && (
+                    <p className="text-xs text-destructive">{errors.quantityMT}</p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="email">Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                    placeholder="john@company.com"
+                    className={errors.email ? 'border-destructive' : ''}
+                  />
+                  {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+                </div>
+
+                {/* Phone */}
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                    placeholder="+971 50 123 4567"
+                    className={errors.phone ? 'border-destructive' : ''}
+                  />
+                  {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="space-y-1.5">
+                <Label htmlFor="message">Message</Label>
+                <Textarea
+                  id="message"
+                  rows={4}
+                  value={form.message}
+                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                  placeholder="Tell us about your requirements, preferred packaging, delivery timeline, etc."
+                  className={errors.message ? 'border-destructive' : ''}
+                />
+                {errors.message && <p className="text-xs text-destructive">{errors.message}</p>}
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full sm:w-auto px-10"
+                disabled={submitInquiry.isPending}
+              >
+                {submitInquiry.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting…
+                  </>
+                ) : (
+                  'Submit Inquiry'
+                )}
+              </Button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

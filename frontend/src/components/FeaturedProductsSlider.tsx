@@ -20,17 +20,17 @@ export default function FeaturedProductsSlider() {
       <div className="hidden md:block">
         <button
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-card items-center justify-center hover:bg-cream-200 transition-colors flex"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-royal items-center justify-center hover:bg-cream-dark transition-colors flex"
           aria-label="Scroll left"
         >
-          <ChevronLeft size={20} className="text-green-700" />
+          <ChevronLeft size={20} className="text-royal" />
         </button>
         <button
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-card items-center justify-center hover:bg-cream-200 transition-colors flex"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-royal items-center justify-center hover:bg-cream-dark transition-colors flex"
           aria-label="Scroll right"
         >
-          <ChevronRight size={20} className="text-green-700" />
+          <ChevronRight size={20} className="text-royal" />
         </button>
       </div>
 
@@ -43,9 +43,9 @@ export default function FeaturedProductsSlider() {
         {featured.map((product) => (
           <div
             key={product.id}
-            className="min-w-[280px] max-w-[280px] snap-start bg-white rounded-xl border border-cream-200 shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden group flex flex-col"
+            className="min-w-[280px] max-w-[280px] snap-start bg-white rounded-sm border border-border shadow-xs hover:shadow-royal transition-all duration-300 overflow-hidden group flex flex-col"
           >
-            <div className="bg-green-700 p-5 relative overflow-hidden">
+            <div className="bg-royal p-5 relative overflow-hidden">
               <div
                 className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity"
                 style={{
@@ -66,8 +66,8 @@ export default function FeaturedProductsSlider() {
                 {product.description.substring(0, 100)}...
               </p>
               <Link
-                to="/services"
-                className="mt-4 inline-flex items-center gap-1 text-sm font-body font-semibold text-gold-600 hover:text-gold-700 transition-colors"
+                to="/products"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-body font-semibold text-gold hover:text-gold-dark transition-colors"
               >
                 View Details <ArrowRight size={14} />
               </Link>

@@ -1,252 +1,300 @@
 import { Link } from '@tanstack/react-router';
-import { ArrowRight, Award, Globe, Leaf, Shield, TrendingUp, Users } from 'lucide-react';
-
-const stats = [
-  { value: '30+', label: 'Countries Served' },
-  { value: '50K+', label: 'Metric Tons Exported' },
-  { value: '15+', label: 'Years Experience' },
-  { value: '500+', label: 'Happy Clients' },
-];
-
-const highlights = [
-  {
-    icon: Award,
-    title: 'Premium Quality',
-    description: 'Every grain meets international quality standards with rigorous lab testing and certifications.',
-  },
-  {
-    icon: Globe,
-    title: 'Global Reach',
-    description: 'Trusted by buyers across 30+ countries in Asia, Middle East, Africa, and Europe.',
-  },
-  {
-    icon: Shield,
-    title: 'Certified & Compliant',
-    description: 'FSSAI, APEDA, ISO certified with full compliance to international food safety standards.',
-  },
-  {
-    icon: Leaf,
-    title: 'Sustainably Sourced',
-    description: 'Partnering with responsible farmers across India\'s finest rice-growing regions.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Competitive Pricing',
-    description: 'Direct sourcing from farmers ensures the best prices without compromising quality.',
-  },
-  {
-    icon: Users,
-    title: 'Dedicated Support',
-    description: 'End-to-end support from order placement to delivery at your destination port.',
-  },
-];
-
-const featuredRice = [
-  {
-    name: 'Basmati 1121',
-    origin: 'Punjab, India',
-    grain: 'Extra Long Grain',
-    aroma: 'Intense',
-    image: '/assets/generated/rice-1121-basmati.dim_800x600.png',
-  },
-  {
-    name: 'Pusa Basmati',
-    origin: 'Haryana, India',
-    grain: 'Long Grain',
-    aroma: 'Rich',
-    image: '/assets/generated/rice-pusa-basmati.dim_800x600.png',
-  },
-  {
-    name: 'IR-64 Parboiled',
-    origin: 'West Bengal, India',
-    grain: 'Medium Grain',
-    aroma: 'Mild',
-    image: '/assets/generated/rice-parboiled.dim_800x600.png',
-  },
-  {
-    name: 'Steam Basmati',
-    origin: 'Uttar Pradesh, India',
-    grain: 'Long Grain',
-    aroma: 'Delicate',
-    image: '/assets/generated/rice-steam-basmati.dim_800x600.png',
-  },
-];
+import { Truck, DollarSign, Sprout, ArrowRight, Leaf, Award, Globe } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import FeaturedProductsSlider from '../components/FeaturedProductsSlider';
+import WhyChooseUsCard from '../components/WhyChooseUsCard';
 
 export default function Home() {
   return (
-    <div className="bg-cream-50">
-      {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+    <div className="bg-cream">
+      {/* ── Hero Section ── */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/assets/generated/hero-rice-banner.dim_1920x800.png')" }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/assets/generated/hero-split.dim_1920x1080.png)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-green-900/90 via-green-800/75 to-green-700/40" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-gold-500/20 border border-gold-400/40 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 rounded-full bg-gold-400 animate-pulse" />
-              <span className="text-gold-300 text-sm font-medium font-body">India's Premier Rice Exporter</span>
-            </div>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
-              Premium Indian Rice{' '}
-              <span className="text-gold-400">to the World</span>
-            </h1>
-            <p className="text-lg text-cream-200 leading-relaxed mb-10 font-body max-w-xl">
-              Azad Nexus Global connects India's finest rice producers with buyers across 30+ countries. 
-              From aromatic Basmati to nutritious parboiled varieties — quality you can trust.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 text-green-900 font-semibold rounded-md transition-all duration-200 shadow-gold hover:shadow-gold-lg font-body"
+        {/* Overlay */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, oklch(0.16 0.07 255 / 0.85) 0%, oklch(0.16 0.07 255 / 0.6) 50%, oklch(0.16 0.07 255 / 0.75) 100%)' }} />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-sm border border-white/20 bg-white/10 backdrop-blur-sm">
+            <Leaf size={14} style={{ color: 'oklch(0.75 0.12 75)' }} />
+            <span className="font-body text-xs font-medium text-white/80 uppercase tracking-widest">
+              India's Premier Rice Exporter
+            </span>
+          </div>
+
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight mb-6">
+            Connecting India's{' '}
+            <span style={{ color: 'oklch(0.75 0.12 75)' }}>Finest Harvest</span>
+            {' '}to the World
+          </h1>
+
+          <p className="font-body text-lg sm:text-xl text-white/75 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Premium Basmati & Non-Basmati Rice — Sourced Direct, Delivered Global.
+            Trusted by importers across 30+ countries.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link to="/contact">
+              <Button
+                size="lg"
+                className="font-body font-semibold px-8 py-3 rounded-sm text-base shadow-gold"
+                style={{ backgroundColor: 'oklch(0.75 0.12 75)', color: 'oklch(0.16 0.07 255)' }}
               >
                 Request a Quote
-                <ArrowRight size={18} />
-              </Link>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold rounded-md transition-all duration-200 backdrop-blur-sm font-body"
+              </Button>
+            </Link>
+            <Link to="/products">
+              <Button
+                size="lg"
+                variant="outline"
+                className="font-body font-semibold px-8 py-3 rounded-sm text-base border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm"
               >
-                View Our Products
-              </Link>
-            </div>
+                Explore Products <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Stats Bar */}
-      <section className="bg-green-800 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat) => (
+          {/* Stats */}
+          <div className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto">
+            {[
+              { value: '30+', label: 'Countries' },
+              { value: '6', label: 'Rice Varieties' },
+              { value: '15+', label: 'Years Export' },
+            ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="font-display text-4xl font-bold text-gold-400 mb-1">{stat.value}</div>
-                <div className="text-sm text-cream-300 font-body">{stat.label}</div>
+                <div className="font-display text-3xl font-bold" style={{ color: 'oklch(0.75 0.12 75)' }}>
+                  {stat.value}
+                </div>
+                <div className="font-body text-xs text-white/60 uppercase tracking-wider mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+          <div className="w-px h-12 bg-white/40" />
+          <span className="font-body text-xs text-white/60 uppercase tracking-widest">Scroll</span>
+        </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-20 bg-cream-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="text-gold-600 font-semibold text-sm uppercase tracking-widest font-body">Our Products</span>
-            <h2 className="font-display text-4xl font-bold text-green-800 mt-2 mb-4">
-              Premium Rice Varieties
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto font-body">
-              Sourced from India's finest growing regions, each variety is carefully selected and processed 
-              to meet the highest international standards.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredRice.map((rice) => (
+      {/* ── About Us ── */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+                <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: 'oklch(0.75 0.12 75)' }}>
+                  About AZAD NEXUS
+                </span>
+              </div>
+              <h2 className="font-display text-4xl font-bold text-royal mb-6 leading-tight">
+                A Trusted Name in Global Rice Trade
+              </h2>
+              <p className="font-body text-base text-muted-foreground leading-relaxed mb-4">
+                AZAD NEXUS is an India-based export company with deep roots in the agricultural heartlands of the subcontinent. We specialize in the global export of Premium Basmati and Non-Basmati rice, bridging the gap between India's finest farms and international buyers.
+              </p>
+              <p className="font-body text-base text-muted-foreground leading-relaxed mb-4">
+                Our supply chain is built on transparency, quality control, and long-term partnerships. From APEDA-registered sourcing to export-grade packaging, every grain we ship meets the highest international standards.
+              </p>
+              <p className="font-body text-base text-muted-foreground leading-relaxed">
+                We serve supermarket chains, wholesale distributors, and institutional buyers across the Middle East, Europe, Southeast Asia, and Africa — delivering not just rice, but a reliable supply chain you can count on.
+              </p>
+              <div className="mt-8">
+                <Link to="/products">
+                  <Button
+                    className="font-body font-semibold rounded-sm"
+                    style={{ backgroundColor: 'oklch(0.22 0.09 255)', color: 'white' }}
+                  >
+                    View Our Products <ArrowRight size={16} className="ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="rounded-sm overflow-hidden shadow-royal-lg">
+                <img
+                  src="/assets/generated/rice-texture.dim_1200x800.png"
+                  alt="Premium Basmati Rice"
+                  className="w-full h-80 object-cover"
+                />
+              </div>
               <div
-                key={rice.name}
-                className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 border border-cream-200"
+                className="absolute -bottom-6 -left-6 bg-white rounded-sm shadow-royal p-5 border border-border"
               >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={rice.image}
-                    alt={rice.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display font-semibold text-green-800 text-lg mb-3">{rice.name}</h3>
-                  <div className="space-y-1.5 text-sm font-body">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Origin</span>
-                      <span className="text-green-700 font-medium">{rice.origin}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Grain</span>
-                      <span className="text-green-700 font-medium">{rice.grain}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Aroma</span>
-                      <span className="text-green-700 font-medium">{rice.aroma}</span>
-                    </div>
+                <div className="flex items-center gap-3">
+                  <Award size={28} style={{ color: 'oklch(0.75 0.12 75)' }} />
+                  <div>
+                    <div className="font-display text-sm font-bold text-royal">APEDA Registered</div>
+                    <div className="font-body text-xs text-muted-foreground">Export Certified</div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-green-700 text-green-700 hover:bg-green-700 hover:text-white font-semibold rounded-md transition-all duration-200 font-body"
-            >
-              View All Products
-              <ArrowRight size={16} />
-            </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="text-gold-600 font-semibold text-sm uppercase tracking-widest font-body">Why Us</span>
-            <h2 className="font-display text-4xl font-bold text-green-800 mt-2 mb-4">
-              Why Choose Azad Nexus Global
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto font-body">
-              We combine decades of expertise with modern logistics to deliver premium Indian rice 
-              reliably to your doorstep, anywhere in the world.
+      {/* ── Featured Products Slider ── */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-cream">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+              <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: 'oklch(0.75 0.12 75)' }}>
+                Our Products
+              </span>
+              <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+            </div>
+            <h2 className="font-display text-4xl font-bold text-royal">Featured Rice Varieties</h2>
+            <p className="font-body text-base text-muted-foreground mt-3 max-w-xl mx-auto">
+              From the world's longest Basmati grain to high-yield Non-Basmati varieties — explore our export-grade portfolio.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {highlights.map((item) => (
-              <div
-                key={item.title}
-                className="p-6 rounded-xl bg-cream-50 border border-cream-200 hover:border-gold-300 hover:shadow-gold transition-all duration-300 group"
+          <FeaturedProductsSlider />
+          <div className="text-center mt-10">
+            <Link to="/products">
+              <Button
+                variant="outline"
+                className="font-body font-semibold rounded-sm border-royal text-royal hover:bg-royal hover:text-white transition-colors"
               >
-                <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center mb-4 group-hover:bg-gold-100 transition-colors">
-                  <item.icon size={22} className="text-green-700 group-hover:text-gold-600 transition-colors" />
-                </div>
-                <h3 className="font-display font-semibold text-green-800 text-lg mb-2">{item.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed font-body">{item.description}</p>
-              </div>
-            ))}
+                View Full Catalog <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-green-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <img
-            src="/assets/generated/rice-texture.dim_1200x800.png"
-            alt=""
-            className="w-full h-full object-cover"
-          />
+      {/* ── Why Choose Us ── */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+              <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: 'oklch(0.75 0.12 75)' }}>
+                Why AZAD NEXUS
+              </span>
+              <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+            </div>
+            <h2 className="font-display text-4xl font-bold text-royal">Built for Global Trade</h2>
+            <p className="font-body text-base text-muted-foreground mt-3 max-w-xl mx-auto">
+              We aren't just selling rice — we're delivering a reliable supply chain.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <WhyChooseUsCard
+              icon={Truck}
+              title="Timely Delivery"
+              description="We maintain strict shipment schedules with real-time cargo tracking. Our logistics network ensures your order arrives on time, every time — from Indian ports to your destination."
+            />
+            <WhyChooseUsCard
+              icon={DollarSign}
+              title="Competitive Pricing"
+              description="Direct sourcing from farmers eliminates middlemen, allowing us to offer the most competitive market rates without compromising on quality or grade specifications."
+            />
+            <WhyChooseUsCard
+              icon={Globe}
+              title="Direct Sourcing"
+              description="We work directly with verified farming communities across Punjab, Haryana, and UP — ensuring traceability, freshness, and authentic grain quality from field to freight."
+            />
+          </div>
         </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-6">
+      </section>
+
+      {/* ── Direct from Farmers ── */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}>
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: 'url(/assets/generated/rice-texture.dim_1200x800.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
+                <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: 'oklch(0.75 0.12 75)' }}>
+                  Farm to Export
+                </span>
+              </div>
+              <h2 className="font-display text-4xl font-bold text-white mb-6 leading-tight">
+                Direct from India's Farming Communities
+              </h2>
+              <p className="font-body text-base text-white/70 leading-relaxed mb-4">
+                Every grain of rice we export begins its journey in the fertile fields of Punjab, Haryana, and Uttar Pradesh — India's rice belt. We partner directly with farming families who have cultivated Basmati for generations.
+              </p>
+              <p className="font-body text-base text-white/70 leading-relaxed">
+                This direct relationship means better prices for farmers, full traceability for buyers, and an authentic product that carries the genuine character of Indian terroir. When you source from AZAD NEXUS, you're investing in a transparent, ethical supply chain.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                {['Punjab', 'Haryana', 'Uttar Pradesh', 'West Bengal'].map((region) => (
+                  <span
+                    key={region}
+                    className="font-body text-sm font-medium px-4 py-2 rounded-sm border border-white/20 text-white/80"
+                    style={{ backgroundColor: 'oklch(1 0 0 / 0.08)' }}
+                  >
+                    {region}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: Sprout, label: 'Direct Farm Sourcing', value: '100%' },
+                { icon: Award, label: 'Quality Certified', value: 'APEDA' },
+                { icon: Globe, label: 'Export Markets', value: '30+' },
+                { icon: Leaf, label: 'Varieties Available', value: '6+' },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-sm p-5 border border-white/10"
+                  style={{ backgroundColor: 'oklch(1 0 0 / 0.06)' }}
+                >
+                  <item.icon size={24} style={{ color: 'oklch(0.75 0.12 75)' }} className="mb-3" />
+                  <div className="font-display text-2xl font-bold text-white mb-1">{item.value}</div>
+                  <div className="font-body text-xs text-white/60">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Banner ── */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-cream">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-display text-4xl font-bold text-royal mb-4">
             Ready to Source Premium Indian Rice?
           </h2>
-          <p className="text-cream-200 text-lg mb-10 font-body">
-            Get in touch with our export team today. We'll provide competitive pricing, 
-            quality certificates, and seamless logistics for your requirements.
+          <p className="font-body text-base text-muted-foreground mb-8">
+            Get current market pricing and availability for your required variety and quantity.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 text-green-900 font-semibold rounded-md transition-all duration-200 shadow-gold font-body"
-            >
-              Get a Free Quote
-              <ArrowRight size={18} />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link to="/contact">
+              <Button
+                size="lg"
+                className="font-body font-semibold px-8 rounded-sm shadow-gold"
+                style={{ backgroundColor: 'oklch(0.75 0.12 75)', color: 'oklch(0.16 0.07 255)' }}
+              >
+                Get Current Market Pricing
+              </Button>
             </Link>
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold rounded-md transition-all duration-200 font-body"
-            >
-              Learn About Us
+            <Link to="/products">
+              <Button
+                size="lg"
+                variant="outline"
+                className="font-body font-semibold px-8 rounded-sm border-royal text-royal hover:bg-royal hover:text-white transition-colors"
+              >
+                Browse Products
+              </Button>
             </Link>
           </div>
         </div>

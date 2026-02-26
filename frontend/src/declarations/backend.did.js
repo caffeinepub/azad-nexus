@@ -8,229 +8,122 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const _CaffeineStorageCreateCertificateResult = IDL.Record({
-  'method' : IDL.Text,
-  'blob_hash' : IDL.Text,
-});
-export const _CaffeineStorageRefillInformation = IDL.Record({
-  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
-});
-export const _CaffeineStorageRefillResult = IDL.Record({
-  'success' : IDL.Opt(IDL.Bool),
-  'topped_up_amount' : IDL.Opt(IDL.Nat),
-});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
-export const BlogPost = IDL.Record({
-  'id' : IDL.Nat,
-  'title' : IDL.Text,
-  'content' : IDL.Text,
-  'imageDescription' : IDL.Text,
-  'publishedDate' : IDL.Text,
-  'timestamp' : IDL.Int,
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'email' : IDL.Text,
 });
-export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const InquiryStatus = IDL.Variant({
+  'resolved' : IDL.Null,
+  'pending' : IDL.Null,
+});
 export const Inquiry = IDL.Record({
   'id' : IDL.Nat,
-  'riceVariety' : IDL.Text,
+  'status' : InquiryStatus,
   'country' : IDL.Text,
+  'riceCategory' : IDL.Text,
   'name' : IDL.Text,
+  'submittedAt' : IDL.Int,
+  'email' : IDL.Text,
   'company' : IDL.Text,
   'message' : IDL.Text,
-  'timestamp' : IDL.Int,
-  'quantityMT' : IDL.Float64,
-});
-export const Service = IDL.Record({
-  'id' : IDL.Nat,
-  'name' : IDL.Text,
-  'description' : IDL.Text,
-  'details' : IDL.Text,
+  'phone' : IDL.Text,
+  'quantityMT' : IDL.Text,
 });
 
 export const idlService = IDL.Service({
-  '_caffeineStorageBlobIsLive' : IDL.Func(
-      [IDL.Vec(IDL.Nat8)],
-      [IDL.Bool],
-      ['query'],
-    ),
-  '_caffeineStorageBlobsToDelete' : IDL.Func(
-      [],
-      [IDL.Vec(IDL.Vec(IDL.Nat8))],
-      ['query'],
-    ),
-  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
-      [IDL.Vec(IDL.Vec(IDL.Nat8))],
-      [],
-      [],
-    ),
-  '_caffeineStorageCreateCertificate' : IDL.Func(
-      [IDL.Text],
-      [_CaffeineStorageCreateCertificateResult],
-      [],
-    ),
-  '_caffeineStorageRefillCashier' : IDL.Func(
-      [IDL.Opt(_CaffeineStorageRefillInformation)],
-      [_CaffeineStorageRefillResult],
-      [],
-    ),
-  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-  'adminLogin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
-  'adminLogout' : IDL.Func([], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'clearInquiries' : IDL.Func([], [], []),
-  'createBlogPost' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-      [IDL.Nat],
-      [],
-    ),
-  'createService' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Nat], []),
-  'deleteBlogPost' : IDL.Func([IDL.Nat], [], []),
-  'deleteInquiry' : IDL.Func([IDL.Nat], [], []),
-  'deleteService' : IDL.Func([IDL.Nat], [], []),
-  'editBlogPost' : IDL.Func(
-      [IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-      [],
-      [],
-    ),
-  'editService' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text, IDL.Text], [], []),
-  'getBlogPost' : IDL.Func([IDL.Nat], [IDL.Opt(BlogPost)], ['query']),
-  'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
+  'deleteInquiry' : IDL.Func([IDL.Text, IDL.Nat], [], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getInquiries' : IDL.Func([], [IDL.Vec(Inquiry)], ['query']),
-  'getService' : IDL.Func([IDL.Nat], [IDL.Opt(Service)], ['query']),
-  'getServices' : IDL.Func([], [IDL.Vec(Service)], ['query']),
+  'getInquiries' : IDL.Func([IDL.Text], [IDL.Vec(Inquiry)], []),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
-  'isAdminLoggedIn' : IDL.Func([], [IDL.Bool], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'markResolved' : IDL.Func([IDL.Text, IDL.Nat], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitInquiry' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Float64, IDL.Text],
-      [IDL.Nat],
+      [
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+      ],
+      [],
       [],
     ),
+  'validateAdmin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(IDL.Text)], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const _CaffeineStorageCreateCertificateResult = IDL.Record({
-    'method' : IDL.Text,
-    'blob_hash' : IDL.Text,
-  });
-  const _CaffeineStorageRefillInformation = IDL.Record({
-    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
-  });
-  const _CaffeineStorageRefillResult = IDL.Record({
-    'success' : IDL.Opt(IDL.Bool),
-    'topped_up_amount' : IDL.Opt(IDL.Nat),
-  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
-  const BlogPost = IDL.Record({
-    'id' : IDL.Nat,
-    'title' : IDL.Text,
-    'content' : IDL.Text,
-    'imageDescription' : IDL.Text,
-    'publishedDate' : IDL.Text,
-    'timestamp' : IDL.Int,
+  const UserProfile = IDL.Record({ 'name' : IDL.Text, 'email' : IDL.Text });
+  const InquiryStatus = IDL.Variant({
+    'resolved' : IDL.Null,
+    'pending' : IDL.Null,
   });
-  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const Inquiry = IDL.Record({
     'id' : IDL.Nat,
-    'riceVariety' : IDL.Text,
+    'status' : InquiryStatus,
     'country' : IDL.Text,
+    'riceCategory' : IDL.Text,
     'name' : IDL.Text,
+    'submittedAt' : IDL.Int,
+    'email' : IDL.Text,
     'company' : IDL.Text,
     'message' : IDL.Text,
-    'timestamp' : IDL.Int,
-    'quantityMT' : IDL.Float64,
-  });
-  const Service = IDL.Record({
-    'id' : IDL.Nat,
-    'name' : IDL.Text,
-    'description' : IDL.Text,
-    'details' : IDL.Text,
+    'phone' : IDL.Text,
+    'quantityMT' : IDL.Text,
   });
   
   return IDL.Service({
-    '_caffeineStorageBlobIsLive' : IDL.Func(
-        [IDL.Vec(IDL.Nat8)],
-        [IDL.Bool],
-        ['query'],
-      ),
-    '_caffeineStorageBlobsToDelete' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Vec(IDL.Nat8))],
-        ['query'],
-      ),
-    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
-        [IDL.Vec(IDL.Vec(IDL.Nat8))],
-        [],
-        [],
-      ),
-    '_caffeineStorageCreateCertificate' : IDL.Func(
-        [IDL.Text],
-        [_CaffeineStorageCreateCertificateResult],
-        [],
-      ),
-    '_caffeineStorageRefillCashier' : IDL.Func(
-        [IDL.Opt(_CaffeineStorageRefillInformation)],
-        [_CaffeineStorageRefillResult],
-        [],
-      ),
-    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-    'adminLogin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
-    'adminLogout' : IDL.Func([], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'clearInquiries' : IDL.Func([], [], []),
-    'createBlogPost' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-        [IDL.Nat],
-        [],
-      ),
-    'createService' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Nat], []),
-    'deleteBlogPost' : IDL.Func([IDL.Nat], [], []),
-    'deleteInquiry' : IDL.Func([IDL.Nat], [], []),
-    'deleteService' : IDL.Func([IDL.Nat], [], []),
-    'editBlogPost' : IDL.Func(
-        [IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-        [],
-        [],
-      ),
-    'editService' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text, IDL.Text], [], []),
-    'getBlogPost' : IDL.Func([IDL.Nat], [IDL.Opt(BlogPost)], ['query']),
-    'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
+    'deleteInquiry' : IDL.Func([IDL.Text, IDL.Nat], [], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getInquiries' : IDL.Func([], [IDL.Vec(Inquiry)], ['query']),
-    'getService' : IDL.Func([IDL.Nat], [IDL.Opt(Service)], ['query']),
-    'getServices' : IDL.Func([], [IDL.Vec(Service)], ['query']),
+    'getInquiries' : IDL.Func([IDL.Text], [IDL.Vec(Inquiry)], []),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
-    'isAdminLoggedIn' : IDL.Func([], [IDL.Bool], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'markResolved' : IDL.Func([IDL.Text, IDL.Nat], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitInquiry' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Float64, IDL.Text],
-        [IDL.Nat],
+        [
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+        ],
+        [],
         [],
       ),
+    'validateAdmin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(IDL.Text)], []),
   });
 };
 
