@@ -1,29 +1,275 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Admin dashboard with username/password authentication",
+  "title": "Azad Nexus Global Rice Export Business Website with Admin Panel",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Replace Internet Identity admin authentication with username/password login form",
+      "id": "REQ-1",
+      "summary": "Build full public-facing business website with Home, About, Services, Blog, and Contact pages for Azad Nexus Global rice export company",
       "acceptanceCriteria": [
-        "The /admin route shows a login form with email and password fields before authentication",
-        "Submitting correct credentials (azadnexus.global@gmail.com / Karusu_7) grants access to the inquiries dashboard",
-        "Submitting incorrect credentials shows a visible error message",
-        "A logout button is visible on the dashboard and returns the user to the login form",
-        "The Internet Identity login flow is removed from the admin page",
-        "No 'Access Denied' error appears when using the correct credentials"
+        "Home page renders with a hero section, key highlights about rice exports, and CTA buttons",
+        "About page describes the company, its mission, and expertise in exporting rice from India",
+        "Services page lists types of rice exported, quality standards, and the export process",
+        "Blog page displays a list of blog posts (fetched from backend)",
+        "Contact page includes a form with fields: name, company, country, rice variety, quantity, message and submits successfully to the backend",
+        "Navigation links work correctly between all pages",
+        "Footer displays company contact details and social links"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/Admin.tsx",
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "create",
+          "description": "Create About page showcasing Azad Nexus Global's company story, mission statement, and expertise in exporting premium rice varieties from India to global markets. Include sections highlighting years of experience, commitment to quality, and the company's role in connecting Indian rice producers with international buyers. Use the generated image frontend/public/assets/generated/about-farming.dim_1200x600.png as a background or hero visual."
+        },
+        {
+          "path": "frontend/src/pages/Services.tsx",
+          "operation": "create",
+          "description": "Create Services page that fetches and displays all service listings from the backend using the getServices() method. Show types of rice exported (basmati varieties, non-basmati, parboiled, etc.), quality standards (lab testing, certifications), and the export process (sourcing, packaging, logistics, delivery). Use the generated images frontend/public/assets/generated/rice-varieties.dim_800x500.png and frontend/public/assets/generated/quality-assurance.dim_800x500.png to illustrate rice varieties and quality standards respectively. Each service card should display name, description, and details fields from the Service interface."
+        },
+        {
+          "path": "frontend/src/pages/Blog.tsx",
+          "operation": "create",
+          "description": "Create Blog page that fetches and displays all published blog posts from the backend using the getBlogPosts() method. Show each post as a card with title, published date, image description, and a truncated content preview. Include a 'Read More' link for each post that navigates to the individual blog post detail page. Display an empty state message when no blog posts are available."
+        },
+        {
+          "path": "frontend/src/pages/BlogPost.tsx",
+          "operation": "create",
+          "description": "Create individual BlogPost detail page that accepts a post ID as a route parameter and fetches the full blog post using getBlogPost(id). Display the complete post with title, published date, image description, and full content. Include a back navigation link to the Blog listing page."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
           "operation": "modify",
-          "description": "Remove Internet Identity authentication logic and replace with a username/password login form. Add state management for login status, error messages, and session management. Call the backend authenticateAdmin function with form credentials. Display InquiriesTable only after successful authentication. Add a logout button that clears the authenticated session and returns to the login form. Remove all references to useInternetIdentity hook and isCallerAdmin query."
+          "description": "Update the Home page hero section to specifically highlight rice exports from India using the generated image frontend/public/assets/generated/hero-rice-banner.dim_1920x800.png. Update hero copy to emphasize 'Premium Indian Rice to the World' messaging. Replace the existing hero image reference with the new rice banner. Keep existing key stats, CTA buttons ('Request a Quote', 'View Products'), featured products slider, and 'Why Choose Us' section intact."
+        },
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "modify",
+          "description": "Verify the existing Contact page form includes all required fields: name, company, country, rice variety, quantity (in metric tons), and message. Ensure the form submits to the backend using submitInquiry() and displays success/error feedback. Update page copy to position the form as an inquiry form for potential buyers and partners. Confirm validation is in place for all fields."
+        },
+        {
+          "path": "frontend/src/components/Navigation.tsx",
+          "operation": "modify",
+          "description": "Add navigation links for the new About, Services, and Blog pages to the desktop nav and mobile menu. Update the navigation structure to include: Home, About, Services, Products (existing), Quality Assurance (existing), Global Footprint (existing), Blog (new), Contact (existing). Use TanStack Router Link components with active state highlighting. Ensure the 'Request a Quote' CTA button remains prominent."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Update the Footer quick links section to include the new About, Services, and Blog pages. Verify company contact details (address, email azadnexus.global@gmail.com, phone) and social media links (LinkedIn, Instagram) are prominently displayed. Ensure the footer follows the warm, professional color palette (deep greens, golds, creams) consistent with the global theme."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register routes for the new About (/about), Services (/services), Blog (/blog), and BlogPost (/blog/:id) pages in the TanStack Router configuration. Ensure all routes use the shared Layout component (Navigation, Footer, WhatsAppButton). Keep existing routes (Home, Products, Quality Assurance, Global Footprint, Contact) intact."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add a new mutation hook useAuthenticateAdmin that calls actor.authenticateAdmin(username, password) and returns the authentication result. This hook should use useMutation from TanStack Query and require the actor from useActor."
+          "description": "Add React Query hooks for fetching blog posts (useGetBlogPosts, useGetBlogPost) and services (useGetServices, useGetService) from the backend. Use the BlogPost and Service interfaces from backend.d.ts. Follow the existing pattern used for inquiry hooks with proper error handling and loading states."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Implement secure admin panel login system using username/password with credentials azadnexus.global@gmail.com / Karusu_7, accessible only after successful authentication",
+      "acceptanceCriteria": [
+        "Admin login page renders at /admin with username and password fields",
+        "Submitting correct credentials grants access to the admin dashboard",
+        "Submitting incorrect credentials shows an error message",
+        "Credentials are stored securely (hashed) in the backend",
+        "Unauthenticated access to admin routes redirects to the login page or shows Access Denied",
+        "Admin can sign out and is returned to the public website"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminLogin.tsx",
+          "operation": "create",
+          "description": "Create AdminLogin page at /admin route with a form containing username (email) and password fields. On form submission, call the backend adminLogin(username, password) method. On success, store a session flag and navigate to the admin dashboard. On failure, display an error message ('Invalid credentials'). Include a link back to the public Home page. Do not use Internet Identity or the authorization component's login flow; this is a standalone username/password login specific to admin access."
+        },
+        {
+          "path": "frontend/src/pages/AdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create AdminDashboard page that serves as the main hub for admin panel features. Check admin authentication status using isAdminLoggedIn() on mount. If not authenticated, redirect to /admin login page. Display navigation tabs or links to Inquiries, Blog Management, and Services Management sections. Include a logout button that calls adminLogout() and redirects to the public Home page. Use a clean, functional admin UI layout."
+        },
+        {
+          "path": "frontend/src/pages/AccessDenied.tsx",
+          "operation": "create",
+          "description": "Create AccessDenied page that displays when unauthenticated users attempt to access admin routes. Show a clear 'Access Denied' message, a brief explanation ('You must be logged in as an administrator to access this page'), and a link back to the public Home page. Optionally include a link to the admin login page."
+        },
+        {
+          "path": "frontend/src/components/AdminGuard.tsx",
+          "operation": "create",
+          "description": "Create an AdminGuard wrapper component that checks if the current user is authenticated as admin using isAdminLoggedIn(). If authenticated, render children. If not, redirect to /admin or show the AccessDenied page. Use this guard to protect all admin routes (AdminDashboard, InquiriesManagement, BlogManagement, ServicesManagement)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the AdminLogin route at /admin and the AdminDashboard route at /admin/dashboard. Wrap admin dashboard and management routes with the AdminGuard component. Register the AccessDenied route at /access-denied. Ensure admin routes do not use the public Layout (Navigation/Footer) but have their own minimal admin layout or header."
+        },
+        {
+          "path": "frontend/src/hooks/useAdminAuth.ts",
+          "operation": "create",
+          "description": "Create a custom hook useAdminAuth that manages admin authentication state. Provide methods for login (calling adminLogin), logout (calling adminLogout), and checking authentication status (calling isAdminLoggedIn). Use TanStack Query to cache and invalidate admin status. Store a simple session flag in sessionStorage to persist admin state across page reloads within the same session."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build admin dashboard feature to view and manage all contact form inquiry submissions with delete functionality",
+      "acceptanceCriteria": [
+        "Admin dashboard shows a table of all submitted inquiries",
+        "Table columns include: name, company, country, rice variety, quantity, message, timestamp",
+        "Admin can delete an individual inquiry",
+        "Inquiry list updates after deletion without requiring a page reload",
+        "Empty state is shown when no inquiries exist"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/InquiriesManagement.tsx",
+          "operation": "create",
+          "description": "Create InquiriesManagement page that fetches all inquiries using getInquiries() and displays them in a table using the existing InquiriesTable component. Add a delete button/icon for each inquiry row that calls deleteInquiry(id) and optimistically updates the UI. Show a confirmation dialog before deleting. Display an empty state message when no inquiries exist. Include a 'Clear All' button (with confirmation) that calls clearInquiries(). Ensure this page is wrapped with AdminGuard and accessible from the AdminDashboard."
+        },
+        {
+          "path": "frontend/src/components/InquiriesTable.tsx",
+          "operation": "modify",
+          "description": "Extend the existing InquiriesTable component to accept an onDelete callback prop that receives an inquiry ID. Add a delete button or icon column to each row. Keep existing sortable column functionality intact. Ensure the table displays all required columns: ID, name, company, country, rice variety, quantity (MT), message, and submission timestamp."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query mutation hooks for deleteInquiry and clearInquiries. After successful deletion or clearing, invalidate the inquiries query cache to trigger a refetch. Follow the existing mutation pattern with proper error handling and optimistic updates."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the InquiriesManagement route at /admin/inquiries. Wrap it with AdminGuard. Ensure it is accessible via navigation from the AdminDashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build blog post management feature in admin panel allowing create, edit, and delete operations for blog posts",
+      "acceptanceCriteria": [
+        "Admin panel includes a 'Blog Posts' section listing all posts",
+        "Admin can create a new blog post with title, content, and published date",
+        "Admin can edit any existing blog post",
+        "Admin can delete any blog post",
+        "Published blog posts appear on the public /blog page",
+        "Blog posts are persisted in the backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/BlogManagement.tsx",
+          "operation": "create",
+          "description": "Create BlogManagement page that lists all blog posts fetched using getBlogPosts(). Display each post in a table or card list with title, published date, and action buttons (Edit, Delete). Include a 'Create New Post' button that opens a form or navigates to a creation page. Provide delete functionality with confirmation that calls deleteBlogPost(id) and updates the UI. Wrap this page with AdminGuard and make it accessible from AdminDashboard."
+        },
+        {
+          "path": "frontend/src/pages/BlogPostEditor.tsx",
+          "operation": "create",
+          "description": "Create BlogPostEditor page (route /admin/blog/new for creation, /admin/blog/edit/:id for editing) with a form containing fields for title, content (textarea or rich text editor), optional image description, and published date. On submit, call createBlogPost() for new posts or editBlogPost(id, ...) for updates. On success, navigate back to BlogManagement. Include cancel/back button. Pre-fill form fields when editing an existing post by fetching it with getBlogPost(id)."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query mutation hooks for createBlogPost, editBlogPost, and deleteBlogPost. After successful create, edit, or delete, invalidate the blog posts query cache to trigger a refetch. Follow the existing mutation pattern with proper error handling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the BlogManagement route at /admin/blog and the BlogPostEditor routes at /admin/blog/new and /admin/blog/edit/:id. Wrap all with AdminGuard. Ensure BlogManagement is accessible via navigation from AdminDashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Build services management feature in admin panel allowing edit operations for service listings",
+      "acceptanceCriteria": [
+        "Admin panel includes a 'Services' section listing all services",
+        "Admin can edit service name, description, and details",
+        "Changes saved by admin are immediately reflected on the public Services page",
+        "Services data is persisted in the backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ServicesManagement.tsx",
+          "operation": "create",
+          "description": "Create ServicesManagement page that lists all services fetched using getServices(). Display each service in a table or card list with name, description, and an Edit button. Clicking Edit opens a form or navigates to an editor page. Wrap this page with AdminGuard and make it accessible from AdminDashboard."
+        },
+        {
+          "path": "frontend/src/pages/ServiceEditor.tsx",
+          "operation": "create",
+          "description": "Create ServiceEditor page (route /admin/services/edit/:id) with a form containing fields for service name, description, and details. Pre-fill the form by fetching the service with getService(id). On submit, call editService(id, name, description, details). On success, navigate back to ServicesManagement. Include cancel/back button."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query mutation hook for editService. After successful edit, invalidate the services query cache to trigger a refetch and update the public Services page. Follow the existing mutation pattern with proper error handling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the ServicesManagement route at /admin/services and the ServiceEditor route at /admin/services/edit/:id. Wrap both with AdminGuard. Ensure ServicesManagement is accessible via navigation from AdminDashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Apply premium, professional visual theme with warm color palette (deep greens, golds, creams) across all public pages",
+      "acceptanceCriteria": [
+        "All pages use a consistent color palette (warm greens, golds, creams)",
+        "Typography is clean and professional throughout",
+        "Navigation, footer, cards, and buttons all follow the same visual theme",
+        "The design communicates trust and global professionalism appropriate for a B2B export business"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update CSS custom properties and Tailwind theme to use a warm, elegant color palette inspired by premium Indian rice exports. Replace the existing royal blue and gold palette with deep greens (e.g., #2D5016, #3A6B1F), rich golds (e.g., #D4AF37, #F4C430), and creamy neutrals (e.g., #F5F1E8, #E8DCC4). Ensure these colors are defined for both light and dark modes. Update accent colors, button styles, and hover states to use the new palette. Maintain clean, modern typography that conveys professionalism and trust."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Update the Tailwind config to extend the theme with custom brand colors matching the warm green, gold, and cream palette. Define color tokens for primary (deep green), secondary (rich gold), accent (cream), and neutral shades. Update box shadows and border styles to complement the premium, agricultural aesthetic. Ensure typography scale remains clean and professional."
+        },
+        {
+          "path": "frontend/src/components/Navigation.tsx",
+          "operation": "modify",
+          "description": "Update the Navigation component styling to use the new warm color palette. Apply deep green or cream background with gold accents for active links and the 'Request a Quote' CTA button. Ensure the logo (frontend/public/assets/generated/logo-azad-nexus.dim_400x120.png) is prominently displayed and integrates with the theme. Maintain sticky positioning and responsive behavior."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Update the Footer component styling to use the warm color palette with a deep green or cream background and gold text accents. Ensure social links, quick nav links, and contact details all follow the consistent theme. Integrate the logo mark (frontend/public/assets/generated/logo-azad-nexus.dim_400x120.png or the 960x960 version as appropriate) if not already present."
+        },
+        {
+          "path": "frontend/src/components/ProductCard.tsx",
+          "operation": "modify",
+          "description": "Update ProductCard styling to use the warm color palette. Apply subtle cream or light green backgrounds with gold borders or badges. Ensure hover states use gentle green or gold highlights. Keep card layout clean and professional, emphasizing quality and trust."
+        },
+        {
+          "path": "frontend/src/components/WhyChooseUsCard.tsx",
+          "operation": "modify",
+          "description": "Update WhyChooseUsCard styling to use the warm color palette. Apply cream or light green backgrounds with gold icon accents. Ensure the cards communicate trust and professionalism with clean typography and consistent spacing."
+        },
+        {
+          "path": "frontend/src/components/RegionCard.tsx",
+          "operation": "modify",
+          "description": "Update RegionCard styling to use the warm color palette. Apply subtle green or cream backgrounds with gold highlight badges. Ensure the design conveys global reach and professionalism."
+        },
+        {
+          "path": "frontend/src/components/CertificationBadge.tsx",
+          "operation": "modify",
+          "description": "Update CertificationBadge styling to use the warm color palette. Apply cream or light green card backgrounds with gold borders or icons. Ensure hover effects use the green/gold theme consistently."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "modify",
+          "description": "Update Home page styling to use the warm color palette. Ensure the hero section background (using frontend/public/assets/generated/hero-rice-banner.dim_1920x800.png) integrates seamlessly with green/gold overlays or gradients. Update CTA buttons to use gold or deep green with hover states. Ensure the 'Why Choose Us' section and stats use the consistent theme."
+        },
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "modify",
+          "description": "Update Contact page styling to use the warm color palette. Apply cream or light green form backgrounds with gold submit buttons and focus states. Ensure the page design conveys professionalism and trust appropriate for a B2B inquiry form."
         }
       ]
     }

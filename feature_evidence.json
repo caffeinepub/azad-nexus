@@ -2,11 +2,19 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-the-internet-identity-based-admin-authentication-on-the-admin-page-with-a-username-password-login-form-the-login-form-should-have-fields-for-email-and-password-a-submit-button-and-display-an-error-message-on-invalid-credentials-on-successful-login-show-the-buyer-inquiries-dashboard-add-a-logout-button-to-return-to-the-login-screen",
-      "featureTitle": "Replace the Internet Identity-based admin authentication on the /admin page with a username/password login form. The login form should have fields for email and password, a submit button, and display an error message on invalid credentials. On successful login, show the buyer inquiries dashboard. Add a logout button to return to the login screen.",
+      "featureId": "feature-build-a-full-public-facing-business-website-for-azad-nexus-global-a-rice-export-company-that-exports-rice-from-india-to-other-countries-the-site-must-include-the-following-pages-home-hero-section-highlighting-rice-exports-from-india-key-stats-ctas-about-company-story-mission-expertise-in-indian-rice-exports-services-types-of-rice-exported-quality-standards-export-process-blog-list-of-articles-news-about-the-rice-export-industry-and-contact-inquiry-form-for-potential-buyers-and-partners-with-fields-for-name-company-country-rice-variety-quantity-and-message",
+      "featureTitle": "Build a full public-facing business website for 'Azad Nexus Global', a rice export company that exports rice from India to other countries. The site must include the following pages: Home (hero section highlighting rice exports from India, key stats, CTAs), About (company story, mission, expertise in Indian rice exports), Services (types of rice exported, quality standards, export process), Blog (list of articles/news about the rice export industry), and Contact (inquiry form for potential buyers and partners with fields for name, company, country, rice variety, quantity, and message).",
       "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Navigation.tsx",
         "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/Admin.tsx"
+        "frontend/src/pages/About.tsx",
+        "frontend/src/pages/Blog.tsx",
+        "frontend/src/pages/BlogPost.tsx",
+        "frontend/src/pages/Contact.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/src/pages/Services.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -14,10 +22,128 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-secure-admin-panel-login-system-using-username-and-password-admin-credentials-username-azadnexus-global-gmail-com-password-karusu-7-must-be-stored-securely-in-the-backend-hashed-not-plaintext-the-admin-panel-must-be-accessible-only-after-successful-login-with-these-credentials-show-an-access-denied-page-for-unauthenticated-access-attempts-with-a-link-back-to-the-public-site",
+      "featureTitle": "Implement a secure admin panel login system using username and password. Admin credentials (username: azadnexus.global@gmail.com, password: Karusu_7) must be stored securely in the backend (hashed, not plaintext). The admin panel must be accessible only after successful login with these credentials. Show an 'Access Denied' page for unauthenticated access attempts with a link back to the public site.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useAdminAuth.ts",
+        "frontend/src/pages/AccessDenied.tsx",
+        "frontend/src/pages/AdminDashboard.tsx",
+        "frontend/src/pages/AdminLogin.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-admin-dashboard-that-allows-the-admin-to-view-and-manage-all-contact-form-inquiry-submissions-the-dashboard-must-display-inquiries-in-a-table-with-columns-for-name-company-country-rice-variety-quantity-message-and-submission-timestamp-admin-must-be-able-to-delete-individual-inquiries",
+      "featureTitle": "Build an admin dashboard that allows the admin to view and manage all contact form inquiry submissions. The dashboard must display inquiries in a table with columns for name, company, country, rice variety, quantity, message, and submission timestamp. Admin must be able to delete individual inquiries.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/InquiriesManagement.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-blog-post-management-feature-in-the-admin-panel-the-admin-must-be-able-to-create-new-blog-posts-title-content-optional-image-description-published-date-edit-existing-blog-posts-and-delete-blog-posts-published-blog-posts-must-appear-on-the-public-blog-page",
+      "featureTitle": "Build a blog post management feature in the admin panel. The admin must be able to create new blog posts (title, content, optional image description, published date), edit existing blog posts, and delete blog posts. Published blog posts must appear on the public Blog page.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/BlogManagement.tsx",
+        "frontend/src/pages/BlogPostEditor.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-services-management-feature-in-the-admin-panel-the-admin-must-be-able-to-edit-existing-service-listings-name-description-details-changes-made-in-the-admin-panel-must-be-reflected-on-the-public-services-page",
+      "featureTitle": "Build a services management feature in the admin panel. The admin must be able to edit existing service listings (name, description, details). Changes made in the admin panel must be reflected on the public Services page.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/ServiceEditor.tsx",
+        "frontend/src/pages/ServicesManagement.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-premium-professional-visual-theme-across-the-entire-public-website-consistent-with-a-high-quality-indian-rice-export-brand-use-a-warm-elegant-color-palette-deep-greens-golds-creams-evoking-quality-grain-and-agricultural-excellence-use-clean-modern-typography-and-a-layout-that-communicates-trust-professionalism-and-global-reach-apply-the-theme-consistently-across-all-pages-including-navigation-footer-cards-buttons-and-forms",
+      "featureTitle": "Apply a premium, professional visual theme across the entire public website consistent with a high-quality Indian rice export brand. Use a warm, elegant color palette (deep greens, golds, creams) evoking quality grain and agricultural excellence. Use clean, modern typography and a layout that communicates trust, professionalism, and global reach. Apply the theme consistently across all pages including navigation, footer, cards, buttons, and forms.",
+      "files": [
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Navigation.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/Contact.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
       ],
       "confidence": "high"
     }

@@ -1,388 +1,302 @@
 import { useState } from 'react';
+import { Phone, Mail, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useSubmitInquiry } from '../hooks/useQueries';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
-} from '@/components/ui/select';
-import { CheckCircle, Loader2, Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 const riceVarieties = [
-  '1121 Basmati',
+  'Basmati 1121',
   'Pusa Basmati',
   'Steam Basmati',
-  'Long Grain',
-  'IR64',
-  'Parboiled (IR64)',
+  'Traditional Basmati',
+  'IR-64 Parboiled',
+  'Long Grain White',
+  'Sona Masoori',
+  'Other',
 ];
 
-interface FormData {
-  name: string;
-  company: string;
-  country: string;
-  riceVariety: string;
-  quantityMT: string;
-  message: string;
-}
-
-const initialForm: FormData = {
-  name: '',
-  company: '',
-  country: '',
-  riceVariety: '',
-  quantityMT: '',
-  message: '',
-};
-
 export default function Contact() {
-  const [form, setForm] = useState<FormData>(initialForm);
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [form, setForm] = useState({
+    name: '',
+    company: '',
+    country: '',
+    riceVariety: '',
+    quantityMT: '',
+    message: '',
+  });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-  const submitMutation = useSubmitInquiry();
+  const submitInquiry = useSubmitInquiry();
 
-  const validate = (): boolean => {
-    const newErrors: Partial<FormData> = {};
-    if (!form.name.trim() || form.name.trim().length < 2) newErrors.name = 'Full name is required (min 2 characters)';
-    if (!form.company.trim() || form.company.trim().length < 2) newErrors.company = 'Company name is required (min 2 characters)';
-    if (!form.country.trim() || form.country.trim().length < 2) newErrors.country = 'Country is required';
-    if (!form.riceVariety) newErrors.riceVariety = 'Please select a rice variety';
-    if (!form.quantityMT || parseFloat(form.quantityMT) <= 0) newErrors.quantityMT = 'Please enter a valid quantity';
-    if (!form.message.trim() || form.message.trim().length < 5) newErrors.message = 'Message is required (min 5 characters)';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    setError('');
 
-    submitMutation.mutate(
-      {
-        name: form.name.trim(),
-        company: form.company.trim(),
-        country: form.country.trim(),
+    if (!form.name || !form.company || !form.country || !form.riceVariety || !form.quantityMT || !form.message) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
+    const qty = parseFloat(form.quantityMT);
+    if (isNaN(qty) || qty <= 0) {
+      setError('Please enter a valid quantity greater than 0.');
+      return;
+    }
+
+    try {
+      await submitInquiry.mutateAsync({
+        name: form.name,
+        company: form.company,
+        country: form.country,
         riceVariety: form.riceVariety,
-        quantityMT: parseFloat(form.quantityMT),
-        message: form.message.trim(),
-      },
-      {
-        onSuccess: () => {
-          setSubmitted(true);
-          setForm(initialForm);
-        },
-      }
-    );
-  };
-
-  const handleChange = (field: keyof FormData, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+        quantityMT: qty,
+        message: form.message,
+      });
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err?.message || 'Failed to submit inquiry. Please try again.');
+    }
   };
 
   return (
-    <div className="bg-cream min-h-screen">
-      {/* Page Header */}
-      <div
-        className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
-        style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
-      >
-        <div
-          className="absolute inset-0 opacity-15"
-          style={{
-            backgroundImage: 'url(/assets/generated/rice-texture.dim_1200x800.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="relative z-10 max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
-            <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: 'oklch(0.75 0.12 75)' }}>
-              Get in Touch
-            </span>
-            <div className="w-8 h-px" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
-          </div>
-          <h1 className="font-display text-5xl font-bold text-white mb-4">Request a Quote</h1>
-          <p className="font-body text-lg text-white/70 max-w-2xl mx-auto">
-            Tell us your requirements and we'll respond with current market pricing and availability within 24 hours.
+    <div className="bg-cream-50">
+      {/* Hero */}
+      <section className="py-20 bg-green-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-gold-300 font-semibold text-sm uppercase tracking-widest font-body">Get In Touch</span>
+          <h1 className="font-display text-5xl font-bold text-white mt-3 mb-6">
+            Request a Quote
+          </h1>
+          <p className="text-cream-200 text-lg max-w-2xl mx-auto font-body">
+            Ready to source premium Indian rice? Fill out the form below and our export team 
+            will get back to you within 24 hours.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Contact Details Banner */}
-      <div style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} className="py-5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12">
-          <a
-            href="tel:+917058779219"
-            className="flex items-center gap-3 group"
-          >
-            <div
-              className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0 transition-colors"
-              style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
-            >
-              <Phone size={16} className="text-white" />
-            </div>
-            <div>
-              <div className="font-body text-xs font-semibold uppercase tracking-wider" style={{ color: 'oklch(0.22 0.09 255)' }}>
-                Call Us
-              </div>
-              <div
-                className="font-body text-base font-bold group-hover:underline"
-                style={{ color: 'oklch(0.16 0.07 255)' }}
-              >
-                +91 70587 79219
-              </div>
-            </div>
+      {/* Contact Banner */}
+      <div className="bg-gold-500 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-center gap-8">
+          <a href="tel:+917058779219" className="flex items-center gap-2 text-green-900 font-semibold font-body hover:text-green-700 transition-colors">
+            <Phone size={16} />
+            +91 70587 79219
           </a>
-
-          <div className="hidden sm:block w-px h-10 bg-white/40" />
-
-          <a
-            href="mailto:azadnexus.global@gmail.com"
-            className="flex items-center gap-3 group"
-          >
-            <div
-              className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0 transition-colors"
-              style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
-            >
-              <Mail size={16} className="text-white" />
-            </div>
-            <div>
-              <div className="font-body text-xs font-semibold uppercase tracking-wider" style={{ color: 'oklch(0.22 0.09 255)' }}>
-                Email Us
-              </div>
-              <div
-                className="font-body text-base font-bold group-hover:underline"
-                style={{ color: 'oklch(0.16 0.07 255)' }}
-              >
-                azadnexus.global@gmail.com
-              </div>
-            </div>
+          <a href="mailto:azadnexus.global@gmail.com" className="flex items-center gap-2 text-green-900 font-semibold font-body hover:text-green-700 transition-colors">
+            <Mail size={16} />
+            azadnexus.global@gmail.com
           </a>
         </div>
       </div>
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      {/* Main Content */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Contact Info */}
-            <div className="lg:col-span-1">
-              <h2 className="font-display text-2xl font-bold text-royal mb-6">Contact Information</h2>
-              <div className="space-y-5">
-                {[
-                  {
-                    icon: MapPin,
-                    label: 'Location',
-                    value: 'Akurdi near Khandoba Mandir, Pimpri Chinchwad, Pune 411035',
-                    href: undefined,
-                  },
-                  { icon: Mail, label: 'Email', value: 'azadnexus.global@gmail.com', href: 'mailto:azadnexus.global@gmail.com' },
-                  { icon: Phone, label: 'Phone', value: '+91 70587 79219', href: 'tel:+917058779219' },
-                  { icon: Clock, label: 'Response Time', value: 'Within 24 business hours', href: undefined },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-start gap-4">
-                    <div
-                      className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: 'oklch(0.22 0.09 255)' }}
-                    >
-                      <item.icon size={16} style={{ color: 'oklch(0.75 0.12 75)' }} />
-                    </div>
-                    <div>
-                      <div className="font-body text-xs text-muted-foreground uppercase tracking-wider">{item.label}</div>
-                      {item.href ? (
-                        <a
-                          href={item.href}
-                          className="font-body text-sm font-medium text-foreground mt-0.5 hover:text-royal transition-colors hover:underline block"
-                        >
-                          {item.value}
-                        </a>
-                      ) : (
-                        <div className="font-body text-sm font-medium text-foreground mt-0.5">{item.value}</div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            {/* Contact Info Sidebar */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="font-display text-2xl font-bold text-green-800 mb-6">Contact Information</h2>
               </div>
-
-              <div className="mt-10 p-6 rounded-sm border border-border bg-white">
-                <h3 className="font-display text-lg font-bold text-royal mb-3">What to Expect</h3>
-                <ul className="space-y-2">
-                  {[
-                    'Current market pricing for your variety',
-                    'Availability and lead time',
-                    'Minimum order quantities',
-                    'Packaging and labeling options',
-                    'Shipping terms (FOB/CIF)',
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-2 font-body text-sm text-muted-foreground">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'oklch(0.75 0.12 75)' }} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+              <div className="bg-white rounded-xl p-6 border border-cream-200 space-y-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <MapPin size={18} className="text-green-700" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Location</p>
+                    <p className="text-muted-foreground text-sm font-body leading-relaxed">
+                      Akurdi near Khandoba Mandir,<br />
+                      Pimpri Chinchwad, Pune 411035,<br />
+                      Maharashtra, India
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <Mail size={18} className="text-green-700" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Email</p>
+                    <a href="mailto:azadnexus.global@gmail.com" className="text-green-700 hover:text-gold-600 text-sm font-body transition-colors">
+                      azadnexus.global@gmail.com
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <Phone size={18} className="text-green-700" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Phone / WhatsApp</p>
+                    <a href="tel:+917058779219" className="text-green-700 hover:text-gold-600 text-sm font-body transition-colors">
+                      +91 70587 79219
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <Clock size={18} className="text-green-700" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-green-800 font-body text-sm mb-1">Business Hours</p>
+                    <p className="text-muted-foreground text-sm font-body">
+                      Mon–Sat: 9:00 AM – 6:00 PM IST
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Form */}
+            {/* Inquiry Form */}
             <div className="lg:col-span-2">
               {submitted ? (
-                <div className="bg-white rounded-sm border border-border p-12 text-center shadow-xs">
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-                    style={{ backgroundColor: 'oklch(0.96 0.02 255)' }}
-                  >
-                    <CheckCircle size={32} style={{ color: 'oklch(0.22 0.09 255)' }} />
-                  </div>
-                  <h3 className="font-display text-2xl font-bold text-royal mb-3">Inquiry Submitted!</h3>
-                  <p className="font-body text-muted-foreground mb-6 max-w-md mx-auto">
-                    Thank you for your inquiry. Our team will review your requirements and respond with current market pricing within 24 business hours.
+                <div className="bg-white rounded-2xl p-12 border border-cream-200 text-center">
+                  <CheckCircle size={64} className="text-green-500 mx-auto mb-6" />
+                  <h2 className="font-display text-3xl font-bold text-green-800 mb-4">
+                    Inquiry Submitted!
+                  </h2>
+                  <p className="text-muted-foreground font-body text-lg mb-8">
+                    Thank you for your inquiry. Our export team will review your requirements 
+                    and get back to you within 24 hours.
                   </p>
-                  <Button
-                    onClick={() => setSubmitted(false)}
-                    variant="outline"
-                    className="font-body font-semibold rounded-sm border-royal text-royal hover:bg-royal hover:text-white transition-colors"
+                  <button
+                    onClick={() => { setSubmitted(false); setForm({ name: '', company: '', country: '', riceVariety: '', quantityMT: '', message: '' }); }}
+                    className="px-6 py-3 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-md transition-colors font-body"
                   >
                     Submit Another Inquiry
-                  </Button>
+                  </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="bg-white rounded-sm border border-border p-8 shadow-xs">
-                  <h2 className="font-display text-2xl font-bold text-royal mb-6">Inquiry Details</h2>
-
-                  {submitMutation.isError && (
-                    <div className="mb-6 p-4 rounded-sm border border-destructive/30 bg-destructive/5">
-                      <p className="font-body text-sm text-destructive">
-                        {submitMutation.error instanceof Error
-                          ? submitMutation.error.message
-                          : 'Failed to submit inquiry. Please try again.'}
-                      </p>
+                <div className="bg-white rounded-2xl p-8 border border-cream-200">
+                  <h2 className="font-display text-2xl font-bold text-green-800 mb-6">
+                    Send Us Your Requirements
+                  </h2>
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <Label htmlFor="name" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                          Full Name *
+                        </Label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={form.name}
+                          onChange={handleChange}
+                          placeholder="Your full name"
+                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                          Company Name *
+                        </Label>
+                        <Input
+                          id="company"
+                          name="company"
+                          value={form.company}
+                          onChange={handleChange}
+                          placeholder="Your company name"
+                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
+                          required
+                        />
+                      </div>
                     </div>
-                  )}
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Full Name */}
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="font-body text-sm font-medium text-foreground">
-                        Full Name <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        id="name"
-                        value={form.name}
-                        onChange={e => handleChange('name', e.target.value)}
-                        placeholder="John Smith"
-                        className={`font-body rounded-sm ${errors.name ? 'border-destructive' : ''}`}
-                      />
-                      {errors.name && <p className="font-body text-xs text-destructive">{errors.name}</p>}
-                    </div>
-
-                    {/* Company */}
-                    <div className="space-y-2">
-                      <Label htmlFor="company" className="font-body text-sm font-medium text-foreground">
-                        Company Name <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        id="company"
-                        value={form.company}
-                        onChange={e => handleChange('company', e.target.value)}
-                        placeholder="Global Foods Ltd."
-                        className={`font-body rounded-sm ${errors.company ? 'border-destructive' : ''}`}
-                      />
-                      {errors.company && <p className="font-body text-xs text-destructive">{errors.company}</p>}
-                    </div>
-
-                    {/* Country */}
-                    <div className="space-y-2">
-                      <Label htmlFor="country" className="font-body text-sm font-medium text-foreground">
-                        Country <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        id="country"
-                        value={form.country}
-                        onChange={e => handleChange('country', e.target.value)}
-                        placeholder="United Arab Emirates"
-                        className={`font-body rounded-sm ${errors.country ? 'border-destructive' : ''}`}
-                      />
-                      {errors.country && <p className="font-body text-xs text-destructive">{errors.country}</p>}
-                    </div>
-
-                    {/* Rice Variety */}
-                    <div className="space-y-2">
-                      <Label className="font-body text-sm font-medium text-foreground">
-                        Rice Variety <span className="text-destructive">*</span>
-                      </Label>
-                      <Select value={form.riceVariety} onValueChange={v => handleChange('riceVariety', v)}>
-                        <SelectTrigger className={`font-body rounded-sm ${errors.riceVariety ? 'border-destructive' : ''}`}>
-                          <SelectValue placeholder="Select variety..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {riceVarieties.map(v => (
-                            <SelectItem key={v} value={v} className="font-body">{v}</SelectItem>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <Label htmlFor="country" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                          Country *
+                        </Label>
+                        <Input
+                          id="country"
+                          name="country"
+                          value={form.country}
+                          onChange={handleChange}
+                          placeholder="Your country"
+                          className="border-cream-300 focus:border-green-500 focus:ring-green-500"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="riceVariety" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                          Rice Variety *
+                        </Label>
+                        <select
+                          id="riceVariety"
+                          name="riceVariety"
+                          value={form.riceVariety}
+                          onChange={handleChange}
+                          className="w-full h-10 px-3 rounded-md border border-cream-300 bg-white text-sm font-body focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                          required
+                        >
+                          <option value="">Select a variety</option>
+                          {riceVarieties.map((v) => (
+                            <option key={v} value={v}>{v}</option>
                           ))}
-                        </SelectContent>
-                      </Select>
-                      {errors.riceVariety && <p className="font-body text-xs text-destructive">{errors.riceVariety}</p>}
+                        </select>
+                      </div>
                     </div>
-
-                    {/* Quantity */}
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="quantity" className="font-body text-sm font-medium text-foreground">
-                        Quantity (Metric Tons) <span className="text-destructive">*</span>
+                    <div>
+                      <Label htmlFor="quantityMT" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                        Quantity (Metric Tons) *
                       </Label>
                       <Input
-                        id="quantity"
+                        id="quantityMT"
+                        name="quantityMT"
                         type="number"
-                        min="1"
-                        step="0.5"
+                        min="0.1"
+                        step="0.1"
                         value={form.quantityMT}
-                        onChange={e => handleChange('quantityMT', e.target.value)}
+                        onChange={handleChange}
                         placeholder="e.g. 25"
-                        className={`font-body rounded-sm ${errors.quantityMT ? 'border-destructive' : ''}`}
+                        className="border-cream-300 focus:border-green-500 focus:ring-green-500"
+                        required
                       />
-                      {errors.quantityMT && <p className="font-body text-xs text-destructive">{errors.quantityMT}</p>}
                     </div>
-
-                    {/* Message */}
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="message" className="font-body text-sm font-medium text-foreground">
-                        Message / Additional Requirements <span className="text-destructive">*</span>
+                    <div>
+                      <Label htmlFor="message" className="text-green-800 font-body font-medium text-sm mb-1.5 block">
+                        Message / Requirements *
                       </Label>
                       <Textarea
                         id="message"
+                        name="message"
                         value={form.message}
-                        onChange={e => handleChange('message', e.target.value)}
-                        placeholder="Please describe your requirements, preferred packaging, shipping terms, or any other details..."
+                        onChange={handleChange}
+                        placeholder="Please describe your requirements, packaging preferences, delivery port, etc."
                         rows={5}
-                        className={`font-body rounded-sm resize-none ${errors.message ? 'border-destructive' : ''}`}
+                        className="border-cream-300 focus:border-green-500 focus:ring-green-500 resize-none"
+                        required
                       />
-                      {errors.message && <p className="font-body text-xs text-destructive">{errors.message}</p>}
                     </div>
-                  </div>
-
-                  <div className="mt-8">
+                    {error && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm font-body">
+                        {error}
+                      </div>
+                    )}
                     <Button
                       type="submit"
-                      size="lg"
-                      disabled={submitMutation.isPending}
-                      className="w-full font-body font-semibold rounded-sm text-base shadow-gold"
-                      style={{ backgroundColor: 'oklch(0.75 0.12 75)', color: 'oklch(0.16 0.07 255)' }}
+                      disabled={submitInquiry.isPending}
+                      className="w-full bg-gold-500 hover:bg-gold-400 text-green-900 font-semibold py-3 rounded-md transition-colors font-body"
                     >
-                      {submitMutation.isPending ? (
-                        <>
-                          <Loader2 size={18} className="mr-2 animate-spin" />
+                      {submitInquiry.isPending ? (
+                        <span className="flex items-center gap-2">
+                          <span className="w-4 h-4 border-2 border-green-900/30 border-t-green-900 rounded-full animate-spin" />
                           Submitting...
-                        </>
+                        </span>
                       ) : (
-                        'Request a Quote'
+                        'Submit Inquiry'
                       )}
                     </Button>
-                    <p className="font-body text-xs text-muted-foreground text-center mt-3">
-                      We respond within 24 business hours. All inquiries are confidential.
-                    </p>
-                  </div>
-                </form>
+                  </form>
+                </div>
               )}
             </div>
           </div>

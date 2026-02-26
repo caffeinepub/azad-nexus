@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { Inquiry, UserProfile } from '../backend';
+import type { BlogPost, Service, Inquiry } from '../backend';
 
-// ── Inquiries ────────────────────────────────────────────────────────────────
+// ── Inquiry Hooks ────────────────────────────────────────────────────────────
 
 export function useSubmitInquiry() {
   const { actor } = useActor();
@@ -33,7 +33,7 @@ export function useSubmitInquiry() {
   });
 }
 
-export function useGetInquiries(enabled: boolean) {
+export function useGetInquiries() {
   const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<Inquiry[]>({
@@ -42,49 +42,179 @@ export function useGetInquiries(enabled: boolean) {
       if (!actor) return [];
       return actor.getInquiries();
     },
-    enabled: !!actor && !actorFetching && enabled,
+    enabled: !!actor && !actorFetching,
   });
 }
 
-/** Alias for useGetInquiries — fetches all inquiries (admin-only). */
-export function useGetAllInquiries(enabled = true) {
-  return useGetInquiries(enabled);
+export function useGetAllInquiries() {
+  return useGetInquiries();
 }
 
-// ── Admin Authentication ──────────────────────────────────────────────────────
-
-export function useAuthenticateAdmin() {
+export function useDeleteInquiry() {
   const { actor } = useActor();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (credentials: { username: string; password: string }) => {
+    mutationFn: async (id: bigint) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.authenticateAdmin(credentials.username, credentials.password);
+      return actor.deleteInquiry(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inquiries'] });
     },
   });
 }
 
-// ── User Profile ─────────────────────────────────────────────────────────────
+export function useClearInquiries() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
 
-export function useGetCallerUserProfile() {
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.clearInquiries();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inquiries'] });
+    },
+  });
+}
+
+// ── Blog Post Hooks ──────────────────────────────────────────────────────────
+
+export function useGetBlogPosts() {
   const { actor, isFetching: actorFetching } = useActor();
 
-  const query = useQuery<UserProfile | null>({
-    queryKey: ['currentUserProfile'],
+  return useQuery<BlogPost[]>({
+    queryKey: ['blogPosts'],
     queryFn: async () => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.getCallerUserProfile();
+      if (!actor) return [];
+      return actor.getBlogPosts();
     },
     enabled: !!actor && !actorFetching,
-    retry: false,
   });
-
-  return {
-    ...query,
-    isLoading: actorFetching || query.isLoading,
-    isFetched: !!actor && query.isFetched,
-  };
 }
+
+export function useGetBlogPost(id: bigint | null) {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  return useQuery<BlogPost | null>({
+    queryKey: ['blogPost', id?.toString()],
+    queryFn: async () => {
+      if (!actor || id === null) return null;
+      return actor.getBlogPost(id);
+    },
+    enabled: !!actor && !actorFetching && id !== null,
+  });
+}
+
+export function useCreateBlogPost() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      title: string;
+      content: string;
+      imageDescription: string;
+      publishedDate: string;
+    }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.createBlogPost(data.title, data.content, data.imageDescription, data.publishedDate);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
+    },
+  });
+}
+
+export function useEditBlogPost() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      id: bigint;
+      title: string;
+      content: string;
+      imageDescription: string;
+      publishedDate: string;
+    }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.editBlogPost(data.id, data.title, data.content, data.imageDescription, data.publishedDate);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
+      queryClient.invalidateQueries({ queryKey: ['blogPost'] });
+    },
+  });
+}
+
+export function useDeleteBlogPost() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: bigint) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.deleteBlogPost(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogPosts'] });
+    },
+  });
+}
+
+// ── Service Hooks ────────────────────────────────────────────────────────────
+
+export function useGetServices() {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  return useQuery<Service[]>({
+    queryKey: ['services'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getServices();
+    },
+    enabled: !!actor && !actorFetching,
+  });
+}
+
+export function useGetService(id: bigint | null) {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  return useQuery<Service | null>({
+    queryKey: ['service', id?.toString()],
+    queryFn: async () => {
+      if (!actor || id === null) return null;
+      return actor.getService(id);
+    },
+    enabled: !!actor && !actorFetching && id !== null,
+  });
+}
+
+export function useEditService() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      id: bigint;
+      name: string;
+      description: string;
+      details: string;
+    }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.editService(data.id, data.name, data.description, data.details);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['services'] });
+      queryClient.invalidateQueries({ queryKey: ['service'] });
+    },
+  });
+}
+
+// ── Admin Auth Hooks ─────────────────────────────────────────────────────────
 
 export function useIsCallerAdmin() {
   const { actor, isFetching: actorFetching } = useActor();
@@ -93,7 +223,7 @@ export function useIsCallerAdmin() {
     queryKey: ['isCallerAdmin'],
     queryFn: async () => {
       if (!actor) return false;
-      return actor.isCallerAdmin();
+      return actor.isAdminLoggedIn();
     },
     enabled: !!actor && !actorFetching,
   });

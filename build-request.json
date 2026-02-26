@@ -1,67 +1,156 @@
 {
   "kind": "build_request",
-  "title": "Admin dashboard with username/password authentication",
-  "projectName": "AzadNexus",
-  "priority": "high",
+  "title": "Build Azad Nexus Global Rice Export Business Website with Admin Panel",
+  "projectName": "Azad Nexus Global",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a backend function to authenticate admin users with username/password credentials. The hardcoded admin username is 'azadnexus.global@gmail.com' and password is 'Karusu_7'. The function should return a session token or boolean success indicator upon valid credentials, and reject invalid ones.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-8",
-          "msg-10"
-        ],
-        "quotes": [
-          "we will access the admin panel dashboard with username and password",
-          "Username is azadnexus.global@gmail.com and password is Karusu_7"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes an adminLogin(username: Text, password: Text) function",
-        "Returns a success result when credentials match azadnexus.global@gmail.com / Karusu_7",
-        "Returns an error result for any other credentials",
-        "Credentials are stored/compared securely on the backend"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Replace the Internet Identity-based admin authentication on the /admin page with a username/password login form. The login form should have fields for email and password, a submit button, and display an error message on invalid credentials. On successful login, show the buyer inquiries dashboard. Add a logout button to return to the login screen.",
+      "text": "Build a full public-facing business website for 'Azad Nexus Global', a rice export company that exports rice from India to other countries. The site must include the following pages: Home (hero section highlighting rice exports from India, key stats, CTAs), About (company story, mission, expertise in Indian rice exports), Services (types of rice exported, quality standards, export process), Blog (list of articles/news about the rice export industry), and Contact (inquiry form for potential buyers and partners with fields for name, company, country, rice variety, quantity, and message).",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-8",
-          "msg-10"
+          "msg-9"
         ],
         "quotes": [
-          "we will access the admin panel dashboard with username and password",
+          "Export we export rice from India to others countries.",
+          "Business site"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home page renders with a hero section, key highlights about rice exports, and CTA buttons",
+        "About page describes the company, its mission, and expertise in exporting rice from India",
+        "Services page lists types of rice exported, quality standards, and the export process",
+        "Blog page displays a list of blog posts (fetched from backend)",
+        "Contact page includes a form with fields: name, company, country, rice variety, quantity, message and submits successfully to the backend",
+        "Navigation links work correctly between all pages",
+        "Footer displays company contact details and social links"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a secure admin panel login system using username and password. Admin credentials (username: azadnexus.global@gmail.com, password: Karusu_7) must be stored securely in the backend (hashed, not plaintext). The admin panel must be accessible only after successful login with these credentials. Show an 'Access Denied' page for unauthenticated access attempts with a link back to the public site.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-6",
+          "msg-8"
+        ],
+        "quotes": [
+          "Ok we will access the admin panel dashboard with username and password",
           "Username is azadnexus.global@gmail.com and password is Karusu_7"
         ]
       },
       "acceptanceCriteria": [
-        "The /admin route shows a login form with email and password fields before authentication",
-        "Submitting correct credentials (azadnexus.global@gmail.com / Karusu_7) grants access to the inquiries dashboard",
-        "Submitting incorrect credentials shows a visible error message",
-        "A logout button is visible on the dashboard and returns the user to the login form",
-        "The Internet Identity login flow is removed from the admin page",
-        "No 'Access Denied' error appears when using the correct credentials"
+        "Admin login page renders at /admin with username and password fields",
+        "Submitting correct credentials grants access to the admin dashboard",
+        "Submitting incorrect credentials shows an error message",
+        "Credentials are stored securely (hashed) in the backend",
+        "Unauthenticated access to admin routes redirects to the login page or shows Access Denied",
+        "Admin can sign out and is returned to the public website"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build an admin dashboard that allows the admin to view and manage all contact form inquiry submissions. The dashboard must display inquiries in a table with columns for name, company, country, rice variety, quantity, message, and submission timestamp. Admin must be able to delete individual inquiries.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "yeah all managing inquires contact form submission"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard shows a table of all submitted inquiries",
+        "Table columns include: name, company, country, rice variety, quantity, message, timestamp",
+        "Admin can delete an individual inquiry",
+        "Inquiry list updates after deletion without requiring a page reload",
+        "Empty state is shown when no inquiries exist"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Build a blog post management feature in the admin panel. The admin must be able to create new blog posts (title, content, optional image description, published date), edit existing blog posts, and delete blog posts. Published blog posts must appear on the public Blog page.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "managing blog post"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes a 'Blog Posts' section listing all posts",
+        "Admin can create a new blog post with title, content, and published date",
+        "Admin can edit any existing blog post",
+        "Admin can delete any blog post",
+        "Published blog posts appear on the public /blog page",
+        "Blog posts are persisted in the backend"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Build a services management feature in the admin panel. The admin must be able to edit existing service listings (name, description, details). Changes made in the admin panel must be reflected on the public Services page.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "edit service"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes a 'Services' section listing all services",
+        "Admin can edit service name, description, and details",
+        "Changes saved by admin are immediately reflected on the public Services page",
+        "Services data is persisted in the backend"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Apply a premium, professional visual theme across the entire public website consistent with a high-quality Indian rice export brand. Use a warm, elegant color palette (deep greens, golds, creams) evoking quality grain and agricultural excellence. Use clean, modern typography and a layout that communicates trust, professionalism, and global reach. Apply the theme consistently across all pages including navigation, footer, cards, buttons, and forms.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8"
+        ],
+        "quotes": [
+          "Export we export rice from India to others countries."
+        ]
+      },
+      "acceptanceCriteria": [
+        "All pages use a consistent color palette (warm greens, golds, creams)",
+        "Typography is clean and professional throughout",
+        "Navigation, footer, cards, and buttons all follow the same visual theme",
+        "The design communicates trust and global professionalism appropriate for a B2B export business"
       ]
     }
   ],
   "constraints": [
-    "Admin credentials must be validated on the backend, not in frontend code",
-    "Do not change any immutable frontend paths listed in the system context",
-    "Do not remove or break existing buyer inquiry submission or retrieval functionality"
+    "Admin credentials (azadnexus.global@gmail.com / Karusu_7) must be stored securely in the backend — hashed, never in plaintext",
+    "Do not use Internet Identity for admin authentication — use username/password login only",
+    "All Motoko logic must remain in the single backend/main.mo actor"
   ],
   "nonGoals": [
-    "Multi-user admin accounts or role management",
-    "Password reset or change functionality",
-    "Internet Identity authentication for admin access",
-    "Persistent session across browser restarts (session can reset on page reload)"
+    "E-commerce or payment processing",
+    "Multi-admin or role-based access control",
+    "Real-time chat or WebSocket features",
+    "Third-party email delivery for inquiry notifications",
+    "Customer-facing user accounts or authentication"
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Hero banner showing golden rice grains and lush green paddy fields under warm sunlight, wide landscape format (hero-rice-banner.dim_1920x800.png)",
+      "About page background image showing traditional Indian rice farming with workers in paddy fields (about-farming.dim_1200x600.png)",
+      "Azad Nexus Global logo mark — a stylized golden rice stalk with a globe motif, on transparent background (logo-azad-nexus.dim_400x120.png)",
+      "Rice variety showcase image showing assorted premium rice grains in elegant wooden bowls on a dark surface (rice-varieties.dim_800x500.png)",
+      "Quality assurance illustration showing lab testing equipment and quality certification symbols with rice (quality-assurance.dim_800x500.png)"
+    ],
     "edits": []
   }
 }

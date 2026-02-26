@@ -1,19 +1,60 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project for azadnexus.com with a buyer inquiries system and admin dashboard. Admin panel is accessible at /admin with username/password authentication (azadnexus.global@gmail.com / Karusu_7). Only the admin can log in and view buyer inquiries.",
+  "summary": "Azad Nexus Global — a rice export business website. Includes a public website with Home, About, Services, Blog, and Contact pages, plus a secured admin panel for managing inquiries, blog posts, and services. Admin login uses username/password credentials stored securely in the backend.",
   "architectural_notes": [
-    "Admin panel at /admin secured with username/password authentication; credentials stored securely on backend",
-    "Admin credentials: username azadnexus.global@gmail.com, password Karusu_7"
+    "Admin credentials (azadnexus.global@gmail.com) stored securely in backend, not hardcoded in frontend",
+    "Admin panel access gated by username/password authentication"
   ],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Hero banner showing golden rice grains and lush green paddy fields under warm sunlight, wide landscape format (hero-rice-banner.dim_1920x800.png)\n- About page background image showing traditional Indian rice farming with workers in paddy fields (about-farming.dim_1200x600.png)\n- Azad Nexus Global logo mark — a stylized golden rice stalk with a globe motif, on transparent background (logo-azad-nexus.dim_400x120.png)\n- Rice variety showcase image showing assorted premium rice grains in elegant wooden bowls on a dark surface (rice-varieties.dim_800x500.png)\n- Quality assurance illustration showing lab testing equipment and quality certification symbols with rice (quality-assurance.dim_800x500.png)",
   "existing_features": [
     {
-      "id": "feature-replace-the-internet-identity-based-admin-authentication-on-the-admin-page-with-a-username-password-login-form-the-login-form-should-have-fields-for-email-and-password-a-submit-button-and-display-an-error-message-on-invalid-credentials-on-successful-login-show-the-buyer-inquiries-dashboard-add-a-logout-button-to-return-to-the-login-screen",
-      "title": "Replace the Internet Identity-based admin authentication on the /admin page with a username/password login form. The login form should have fields for email and password, a submit button, and display an error message on invalid credentials. On successful login, show the buyer inquiries dashboard. Add a logout button to return to the login screen.",
+      "id": "feature-build-a-full-public-facing-business-website-for-azad-nexus-global-a-rice-export-company-that-exports-rice-from-india-to-other-countries-the-site-must-include-the-following-pages-home-hero-section-highlighting-rice-exports-from-india-key-stats-ctas-about-company-story-mission-expertise-in-indian-rice-exports-services-types-of-rice-exported-quality-standards-export-process-blog-list-of-articles-news-about-the-rice-export-industry-and-contact-inquiry-form-for-potential-buyers-and-partners-with-fields-for-name-company-country-rice-variety-quantity-and-message",
+      "title": "Build a full public-facing business website for 'Azad Nexus Global', a rice export company that exports rice from India to other countries. The site must include the following pages: Home (hero section highlighting rice exports from India, key stats, CTAs), About (company story, mission, expertise in Indian rice exports), Services (types of rice exported, quality standards, export process), Blog (list of articles/news about the rice export industry), and Contact (inquiry form for potential buyers and partners with fields for name, company, country, rice variety, quantity, and message).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-secure-admin-panel-login-system-using-username-and-password-admin-credentials-username-azadnexus-global-gmail-com-password-karusu-7-must-be-stored-securely-in-the-backend-hashed-not-plaintext-the-admin-panel-must-be-accessible-only-after-successful-login-with-these-credentials-show-an-access-denied-page-for-unauthenticated-access-attempts-with-a-link-back-to-the-public-site",
+      "title": "Implement a secure admin panel login system using username and password. Admin credentials (username: azadnexus.global@gmail.com, password: Karusu_7) must be stored securely in the backend (hashed, not plaintext). The admin panel must be accessible only after successful login with these credentials. Show an 'Access Denied' page for unauthenticated access attempts with a link back to the public site.",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-admin-dashboard-that-allows-the-admin-to-view-and-manage-all-contact-form-inquiry-submissions-the-dashboard-must-display-inquiries-in-a-table-with-columns-for-name-company-country-rice-variety-quantity-message-and-submission-timestamp-admin-must-be-able-to-delete-individual-inquiries",
+      "title": "Build an admin dashboard that allows the admin to view and manage all contact form inquiry submissions. The dashboard must display inquiries in a table with columns for name, company, country, rice variety, quantity, message, and submission timestamp. Admin must be able to delete individual inquiries.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-blog-post-management-feature-in-the-admin-panel-the-admin-must-be-able-to-create-new-blog-posts-title-content-optional-image-description-published-date-edit-existing-blog-posts-and-delete-blog-posts-published-blog-posts-must-appear-on-the-public-blog-page",
+      "title": "Build a blog post management feature in the admin panel. The admin must be able to create new blog posts (title, content, optional image description, published date), edit existing blog posts, and delete blog posts. Published blog posts must appear on the public Blog page.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-services-management-feature-in-the-admin-panel-the-admin-must-be-able-to-edit-existing-service-listings-name-description-details-changes-made-in-the-admin-panel-must-be-reflected-on-the-public-services-page",
+      "title": "Build a services management feature in the admin panel. The admin must be able to edit existing service listings (name, description, details). Changes made in the admin panel must be reflected on the public Services page.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-premium-professional-visual-theme-across-the-entire-public-website-consistent-with-a-high-quality-indian-rice-export-brand-use-a-warm-elegant-color-palette-deep-greens-golds-creams-evoking-quality-grain-and-agricultural-excellence-use-clean-modern-typography-and-a-layout-that-communicates-trust-professionalism-and-global-reach-apply-the-theme-consistently-across-all-pages-including-navigation-footer-cards-buttons-and-forms",
+      "title": "Apply a premium, professional visual theme across the entire public website consistent with a high-quality Indian rice export brand. Use a warm, elegant color palette (deep greens, golds, creams) evoking quality grain and agricultural excellence. Use clean, modern typography and a layout that communicates trust, professionalism, and global reach. Apply the theme consistently across all pages including navigation, footer, cards, buttons, and forms.",
+      "reqIds": [
+        "REQ-6"
       ],
       "version": 1
     }
@@ -21,21 +62,37 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Admin dashboard at /admin with username/password login to view buyer inquiries",
+      "summary": "Public website with Home, About, Services, Blog, and Contact pages for rice export business",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add a backend function to authenticate admin users with username/password credentials. The hardcoded admin username is 'azadnexus.global@gmail.com' and password is 'Karusu_7'. The function should return a session token or boolean success indicator upon valid credentials, and reject invalid ones.",
-      "reqIds": [
-        "REQ-1"
-      ],
+      "summary": "Admin panel with secure username/password login (credentials stored in backend)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Admin: manage/view contact form inquiry submissions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Admin: create, edit, and delete blog posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Admin: edit services content",
+      "reqIds": [],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "Azad Nexus",
+  "projectName": "Azad Nexus Global",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
