@@ -1,44 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-update-the-adminlogin-tsx-page-so-that-on-form-submission-it-calls-the-backend-validateadmin-user-pass-function-directly-without-internet-identity-if-a-non-null-access-key-is-returned-save-it-to-sessionstorage-under-a-key-such-as-adminaccesskey-then-redirect-to-the-admin-dashboard-if-null-is-returned-display-an-invalid-credentials-error-message",
-      "featureTitle": "Update the `AdminLogin.tsx` page so that on form submission it calls the backend `validateAdmin(user, pass)` function directly (without Internet Identity). If a non-null access key is returned, save it to `sessionStorage` under a key such as `adminAccessKey`, then redirect to the `/admin` dashboard. If null is returned, display an 'Invalid credentials' error message.",
-      "files": [
-        "frontend/src/pages/AdminLogin.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-useauth-ts-hook-and-usequeries-ts-hooks-so-that-admin-query-functions-getinquiries-markresolved-deleteinquiry-read-the-access-key-from-sessionstorage-and-pass-it-as-a-parameter-to-the-backend-remove-reliance-on-internet-identity-identity-actor-for-admin-operations-the-useactor-hook-may-still-be-used-for-anonymous-calls-like-submitinquiry",
-      "featureTitle": "Update the `useAuth.ts` hook and `useQueries.ts` hooks so that admin query functions (getInquiries, markResolved, deleteInquiry) read the access key from `sessionStorage` and pass it as a parameter to the backend. Remove reliance on Internet Identity identity/actor for admin operations. The `useActor` hook may still be used for anonymous calls like submitInquiry.",
-      "files": [
-        "frontend/src/hooks/useAuth.ts",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

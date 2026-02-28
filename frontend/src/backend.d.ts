@@ -44,5 +44,5 @@ export interface backendInterface {
     markResolved(key: string, id: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitInquiry(name: string, company: string, country: string, quantityMT: string, riceCategory: string, email: string, phone: string, message: string): Promise<void>;
-    validateAdmin(user: string, pass: string): Promise<string | null>;
+    validateAdmin(username: string, password: string): Promise<string | null>;
 }

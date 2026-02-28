@@ -127,7 +127,7 @@ export interface backendInterface {
     markResolved(key: string, id: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitInquiry(name: string, company: string, country: string, quantityMT: string, riceCategory: string, email: string, phone: string, message: string): Promise<void>;
-    validateAdmin(user: string, pass: string): Promise<string | null>;
+    validateAdmin(username: string, password: string): Promise<string | null>;
 }
 import type { Inquiry as _Inquiry, InquiryStatus as _InquiryStatus, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {

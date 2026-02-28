@@ -1,68 +1,21 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-26T01:50:14.944Z",
+  "generatedAt": "2026-02-26T15:12:00.763Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "In the Motoko backend, add stable variables to store the admin username (azadnexus.global@gmail.com) and a hashed version of the admin password (Karusu_7). Add a `validateAdmin(user: Text, pass: Text) : async ?Text` function that compares the provided credentials against the stored values and, on a match, generates a unique access key (a long random string), stores it in a stable variable, and returns it. If credentials do not match, return null.",
+        "summary": "Update the hardcoded admin credentials in the backend so that the username is 'Azadnexus.global@gmail.com' and the password is 'Karusu_7'. The validateAdmin function must accept these new credentials and return a valid session access key on success.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Update the `getInquiries` backend function signature to `getInquiries(key: Text) : async [Inquiry]`. Replace the existing Internet Identity principal check (`caller != admin`) with a check that validates the provided `key` against the stored access key. If the key matches, return all inquiries. If it does not match, return an empty array or trap with an error.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Ensure `submitInquiry` (the customer-facing form submission function) remains publicly callable with no authentication requirement — no access key and no principal check. The function signature and behaviour must remain unchanged for anonymous callers.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Update the `AdminLogin.tsx` page so that on form submission it calls the backend `validateAdmin(user, pass)` function directly (without Internet Identity). If a non-null access key is returned, save it to `sessionStorage` under a key such as `adminAccessKey`, then redirect to the `/admin` dashboard. If null is returned, display an 'Invalid credentials' error message.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/AdminLogin.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/AdminLogin.tsx"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Update the `Admin.tsx` dashboard page so that it reads the access key from `sessionStorage` on load. Pass that access key when calling the backend `getInquiries(key)` function. If no access key is found in sessionStorage, redirect the user to `/admin/login`. Remove any Internet Identity principal-based access control from this page. The dashboard must still display the inquiries table with 'Mark Resolved' and 'Delete' actions; update those backend calls to use access-key auth if they also have principal checks.",
-        "status": "missing",
-        "plannedFiles": [
-          "frontend/src/pages/Admin.tsx"
-        ],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Update the `useAuth.ts` hook and `useQueries.ts` hooks so that admin query functions (getInquiries, markResolved, deleteInquiry) read the access key from `sessionStorage` and pass it as a parameter to the backend. Remove reliance on Internet Identity identity/actor for admin operations. The `useActor` hook may still be used for anonymous calls like submitInquiry.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useAuth.ts",
-          "frontend/src/hooks/useQueries.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useAuth.ts",
-          "frontend/src/hooks/useQueries.ts"
-        ]
       }
     ]
   },
@@ -71,15 +24,9 @@
     "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useAuth.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminLogin.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

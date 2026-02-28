@@ -1,143 +1,34 @@
 {
   "kind": "build_request",
-  "title": "Username/Password Admin Login with Access Key Session",
-  "projectName": "Azad Nexus",
-  "priority": "high",
+  "title": "Reset admin credentials to new username and password",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "In the Motoko backend, add stable variables to store the admin username (azadnexus.global@gmail.com) and a hashed version of the admin password (Karusu_7). Add a `validateAdmin(user: Text, pass: Text) : async ?Text` function that compares the provided credentials against the stored values and, on a match, generates a unique access key (a long random string), stores it in a stable variable, and returns it. If credentials do not match, return null.",
+      "text": "Update the hardcoded admin credentials in the backend so that the username is 'Azadnexus.global@gmail.com' and the password is 'Karusu_7'. The validateAdmin function must accept these new credentials and return a valid session access key on success.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-8",
-          "msg-9"
+          "msg-reset-credentials"
         ],
         "quotes": [
-          "create a stable variable that stores my admin_username and a hashed version of my admin_password",
-          "Create a function called validateAdmin(user, pass) function in the backend. If the inputs match my stored credentials, return a unique 'Access Key'"
+          "Username Azadnexus.global@gmail.com, password Karusu_7"
         ]
       },
       "acceptanceCriteria": [
-        "Stable variables for admin_username and hashed admin_password exist in the actor.",
-        "Calling validateAdmin with correct credentials returns a non-null unique access key string.",
-        "Calling validateAdmin with incorrect credentials returns null.",
-        "The generated access key is stored in a stable variable so it persists across queries within the session."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Update the `getInquiries` backend function signature to `getInquiries(key: Text) : async [Inquiry]`. Replace the existing Internet Identity principal check (`caller != admin`) with a check that validates the provided `key` against the stored access key. If the key matches, return all inquiries. If it does not match, return an empty array or trap with an error.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-8",
-          "msg-9"
-        ],
-        "quotes": [
-          "Update the getInquiries(key) function so it only returns data if the 'Access Key' provided matches the one generated at login",
-          "Remove the caller != admin check and replace it with a check for my specific login session"
-        ]
-      },
-      "acceptanceCriteria": [
-        "getInquiries(key) returns the full inquiries list when a valid access key is provided.",
-        "getInquiries(key) returns an empty array or an error when an invalid or empty key is provided.",
-        "No Internet Identity principal check remains in getInquiries."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Ensure `submitInquiry` (the customer-facing form submission function) remains publicly callable with no authentication requirement — no access key and no principal check. The function signature and behaviour must remain unchanged for anonymous callers.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-9",
-          "msg-10"
-        ],
-        "quotes": [
-          "submitInquiry(...) remains publicly callable for the customer-facing form",
-          "Ensure the customer-facing form still works and correctly sends data to the backend"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Any unauthenticated user can call submitInquiry and have their inquiry stored.",
-        "The Contact page form submits successfully and shows the success state after submission."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Update the `AdminLogin.tsx` page so that on form submission it calls the backend `validateAdmin(user, pass)` function directly (without Internet Identity). If a non-null access key is returned, save it to `sessionStorage` under a key such as `adminAccessKey`, then redirect to the `/admin` dashboard. If null is returned, display an 'Invalid credentials' error message.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-8",
-          "msg-9",
-          "msg-10"
-        ],
-        "quotes": [
-          "On my Admin Login page, when I enter my email and password, call the validateAdmin function. If it's a match, save that 'Access Key' in the browser's memory for that session",
-          "Provide the login page logic that saves the access key to sessionStorage"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Submitting correct credentials saves the access key to sessionStorage and navigates to /admin.",
-        "Submitting incorrect credentials shows an inline error and does not navigate.",
-        "No Internet Identity login prompt appears on the admin login page."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Update the `Admin.tsx` dashboard page so that it reads the access key from `sessionStorage` on load. Pass that access key when calling the backend `getInquiries(key)` function. If no access key is found in sessionStorage, redirect the user to `/admin/login`. Remove any Internet Identity principal-based access control from this page. The dashboard must still display the inquiries table with 'Mark Resolved' and 'Delete' actions; update those backend calls to use access-key auth if they also have principal checks.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-8",
-          "msg-9",
-          "msg-10"
-        ],
-        "quotes": [
-          "Admin Dashboard that uses that key to fetch the inquiries",
-          "No More 'Access Denied': Remove the caller != admin check"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin dashboard reads the access key from sessionStorage and passes it to getInquiries.",
-        "Inquiries are displayed correctly when a valid access key is present.",
-        "Visiting /admin without a sessionStorage key redirects to /admin/login.",
-        "The 'Access Denied' error no longer appears for a logged-in admin."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Update the `useAuth.ts` hook and `useQueries.ts` hooks so that admin query functions (getInquiries, markResolved, deleteInquiry) read the access key from `sessionStorage` and pass it as a parameter to the backend. Remove reliance on Internet Identity identity/actor for admin operations. The `useActor` hook may still be used for anonymous calls like submitInquiry.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-8",
-          "msg-9"
-        ],
-        "quotes": [
-          "Don't use Internet Identity Principals for this. Treat it like a traditional website login."
-        ]
-      },
-      "acceptanceCriteria": [
-        "useAuth hook provides login, logout, and isAuthenticated functions based on sessionStorage access key.",
-        "Admin query hooks pass the sessionStorage access key to all admin backend calls.",
-        "Logout clears the access key from sessionStorage and redirects to /admin/login."
+        "Calling validateAdmin with username 'Azadnexus.global@gmail.com' and password 'Karusu_7' returns a valid session access key.",
+        "Calling validateAdmin with any other username/password combination returns an error or null.",
+        "The admin login page at /admin/login accepts the new credentials and redirects to the admin dashboard on success."
       ]
     }
   ],
   "constraints": [
-    "Do not use Internet Identity principals for admin authentication — the access key from validateAdmin is the sole auth mechanism for admin routes.",
-    "The customer-facing submitInquiry function must remain publicly accessible without any authentication.",
-    "Access key must be stored in sessionStorage (not localStorage) on the frontend.",
-    "All Motoko logic must remain in the single backend/main.mo actor file."
+    "Do not change any other backend logic, data models, or frontend components beyond what is needed to update the admin credentials."
   ],
   "nonGoals": [
-    "Multi-admin support or admin role management.",
-    "Cryptographic hashing of the password on the frontend before sending to the backend.",
-    "Changing the customer-facing Contact page UI or inquiry form fields.",
-    "Migrating to a different authentication system (e.g., Internet Identity) in this iteration."
+    "Adding a credential management UI",
+    "Implementing password hashing or salting",
+    "Changing the session access key mechanism"
   ],
   "imageRequirements": {
     "required": [],

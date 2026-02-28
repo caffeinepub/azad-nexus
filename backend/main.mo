@@ -36,7 +36,6 @@ actor {
     userProfiles.add(caller, profile);
   };
 
-  // ── Inquiry Types ─────────────────────────────────────────────
   public type Inquiry = {
     id : Nat;
     name : Text;
@@ -56,21 +55,12 @@ actor {
     #resolved;
   };
 
-  public type AdminCredentials = {
-    username : Text;
-    password : Text;
-  };
+  var inquiries : [Inquiry] = [];
+  var nextId = 0;
+  let adminUsername = "Azadnexus.global@gmail.com";
+  let adminPassword = "Karusu_7";
+  var adminAccessKey : ?Text = null;
 
-  // ── Inquiry Storage ──────────────────────────────────────────
-  stable var nextId : Nat = 0;
-  stable var inquiries : [Inquiry] = [];
-
-  // Admin credentials and access key storage
-  stable var adminUsername = "azadnexus.global@gmail.com";
-  stable var adminHashedPassword = "k78hJ1583hk13Gg2FQqvxlOOXslTfBJuVKzTxvaN6QU=";
-  stable var adminAccessKey : ?Text = null;
-
-  // ── Helper: validate access key ───────────────────────────────
   func requireValidKey(key : Text) {
     switch (adminAccessKey) {
       case (null) { Runtime.trap("Unauthorized: No admin access key set") };
@@ -82,8 +72,6 @@ actor {
     };
   };
 
-  // ── Inquiry Management ───────────────────────────────────────
-  // submitInquiry is open to all callers (including anonymous/guests) — no auth check
   public shared func submitInquiry(
     name : Text,
     company : Text,
@@ -112,26 +100,22 @@ actor {
     nextId += 1;
   };
 
-  // validateAdmin is publicly callable — anyone may attempt credential validation
-  public shared func validateAdmin(user : Text, pass : Text) : async ?Text {
-    if (user != adminUsername) {
-      return null;
-    };
-
-    // Compare plain text passwords (temporary solution).
-    if (pass != adminHashedPassword) {
-      return null;
-    };
-
-    // Generate new unique access key.
+  func generateKey() : Text {
     let timestamp = Time.now().toText();
-    let key = user # pass # timestamp;
-
-    adminAccessKey := ?key;
-    ?key;
+    let random = (Time.now() / 1000 % 1000000).toText();
+    "key_" # timestamp # random;
   };
 
-  // getInquiries requires a valid admin access key
+  public shared ({ caller }) func validateAdmin(username : Text, password : Text) : async ?Text {
+    if (username == adminUsername and password == adminPassword) {
+      let key = generateKey();
+      adminAccessKey := ?key;
+      ?key;
+    } else {
+      null;
+    };
+  };
+
   public shared func getInquiries(key : Text) : async [Inquiry] {
     requireValidKey(key);
     let sorted = inquiries.sort(
@@ -144,7 +128,6 @@ actor {
     sorted;
   };
 
-  // markResolved requires a valid admin access key
   public shared func markResolved(key : Text, id : Nat) : async () {
     requireValidKey(key);
     let inquiryIndex = inquiries.findIndex(func(inq : Inquiry) : Bool { inq.id == id });
@@ -162,7 +145,6 @@ actor {
     };
   };
 
-  // deleteInquiry requires a valid admin access key
   public shared func deleteInquiry(key : Text, id : Nat) : async () {
     requireValidKey(key);
     let inquiryIndex = inquiries.findIndex(func(inq : Inquiry) : Bool { inq.id == id });

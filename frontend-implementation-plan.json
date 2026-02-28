@@ -1,61 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Username/Password Admin Login with Access Key Session",
-  "requirements": [
-    {
-      "id": "REQ-4",
-      "summary": "Update AdminLogin page to authenticate via validateAdmin backend function and save access key to sessionStorage",
-      "acceptanceCriteria": [
-        "Submitting correct credentials saves the access key to sessionStorage and navigates to /admin.",
-        "Submitting incorrect credentials shows an inline error and does not navigate.",
-        "No Internet Identity login prompt appears on the admin login page."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AdminLogin.tsx",
-          "operation": "modify",
-          "description": "Replace hardcoded credential checks with a direct call to the backend validateAdmin function. On successful authentication (non-null access key), save the key to sessionStorage under 'adminAccessKey' and redirect to /admin. On failure (null return), display an inline error message. Remove any Internet Identity dependencies from this page."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Update Admin dashboard to use sessionStorage access key for authentication and data fetching",
-      "acceptanceCriteria": [
-        "Admin dashboard reads the access key from sessionStorage and passes it to getInquiries.",
-        "Inquiries are displayed correctly when a valid access key is present.",
-        "Visiting /admin without a sessionStorage key redirects to /admin/login.",
-        "The 'Access Denied' error no longer appears for a logged-in admin."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Admin.tsx",
-          "operation": "modify",
-          "description": "On component mount, check sessionStorage for 'adminAccessKey'. If absent, redirect to /admin/login. If present, pass the access key when calling getInquiries to fetch inquiry data. Update the 'Mark Resolved' and 'Delete' action handlers to pass the access key to their respective backend calls. Remove any Internet Identity-based access control logic from this page."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Update authentication and query hooks to use sessionStorage access key for admin operations",
-      "acceptanceCriteria": [
-        "useAuth hook provides login, logout, and isAuthenticated functions based on sessionStorage access key.",
-        "Admin query hooks pass the sessionStorage access key to all admin backend calls.",
-        "Logout clears the access key from sessionStorage and redirects to /admin/login."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useAuth.ts",
-          "operation": "modify",
-          "description": "Replace hardcoded credential validation with a call to the backend validateAdmin function. On successful login, save the returned access key to sessionStorage under 'adminAccessKey'. Update isAuthenticated to check for the presence of this key. Update logout to clear the access key from sessionStorage. Remove any reliance on Internet Identity for admin authentication."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Update the useGetInquiries hook to read 'adminAccessKey' from sessionStorage and pass it as a parameter to the backend getInquiries(key) call. Update useMarkResolved and useDeleteInquiry mutation hooks to read the access key from sessionStorage and pass it to their respective backend calls (markResolved(key, id) and deleteInquiry(key, id)). Ensure submitInquiry remains unchanged and callable without any authentication. Remove Internet Identity actor dependencies for admin operations while preserving useActor for anonymous submitInquiry calls."
-        }
-      ]
-    }
-  ]
+  "title": "Reset admin credentials to new username and password",
+  "requirements": []
 }

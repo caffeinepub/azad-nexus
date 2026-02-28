@@ -1,94 +1,22 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "A web app deployed on the Internet Computer (ICP) with an admin panel and customer-facing inquiry form. The admin system uses a username/password login (bypassing Internet Identity) with a backend-generated access key stored in sessionStorage for session management.",
-  "architectural_notes": [
-    "Backend is a Motoko canister on ICP; admin auth uses stable variables for hashed credentials and a session access key instead of Internet Identity principals.",
-    "Access key is generated on successful validateAdmin call and stored in browser sessionStorage for the admin session.",
-    "getInquiries requires a valid access key parameter; no caller principal check."
-  ],
-  "known_issues": [
-    "Hardcoded admin credentials in backend stable variables is a security risk — credentials are visible in canister state and source code."
-  ],
-  "isFixRequest": true,
-  "existing_features": [
-    {
-      "id": "feature-update-the-adminlogin-tsx-page-so-that-on-form-submission-it-calls-the-backend-validateadmin-user-pass-function-directly-without-internet-identity-if-a-non-null-access-key-is-returned-save-it-to-sessionstorage-under-a-key-such-as-adminaccesskey-then-redirect-to-the-admin-dashboard-if-null-is-returned-display-an-invalid-credentials-error-message",
-      "title": "Update the `AdminLogin.tsx` page so that on form submission it calls the backend `validateAdmin(user, pass)` function directly (without Internet Identity). If a non-null access key is returned, save it to `sessionStorage` under a key such as `adminAccessKey`, then redirect to the `/admin` dashboard. If null is returned, display an 'Invalid credentials' error message.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-useauth-ts-hook-and-usequeries-ts-hooks-so-that-admin-query-functions-getinquiries-markresolved-deleteinquiry-read-the-access-key-from-sessionstorage-and-pass-it-as-a-parameter-to-the-backend-remove-reliance-on-internet-identity-identity-actor-for-admin-operations-the-useactor-hook-may-still-be-used-for-anonymous-calls-like-submitinquiry",
-      "title": "Update the `useAuth.ts` hook and `useQueries.ts` hooks so that admin query functions (getInquiries, markResolved, deleteInquiry) read the access key from `sessionStorage` and pass it as a parameter to the backend. Remove reliance on Internet Identity identity/actor for admin operations. The `useActor` hook may still be used for anonymous calls like submitInquiry.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    }
-  ],
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Username/password admin login with backend validateAdmin function returning an access key",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Update getInquiries to validate access key instead of Internet Identity principal",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Frontend admin login page that saves access key to sessionStorage and admin dashboard that uses it to fetch inquiries",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Customer-facing inquiry form remains publicly callable and functional",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "In the Motoko backend, add stable variables to store the admin username (azadnexus.global@gmail.com) and a hashed version of the admin password (Karusu_7). Add a `validateAdmin(user: Text, pass: Text) : async ?Text` function that compares the provided credentials against the stored values and, on a match, generates a unique access key (a long random string), stores it in a stable variable, and returns it. If credentials do not match, return null.",
+      "summary": "Update the hardcoded admin credentials in the backend so that the username is 'Azadnexus.global@gmail.com' and the password is 'Karusu_7'. The validateAdmin function must accept these new credentials and return a valid session access key on success.",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Update the `getInquiries` backend function signature to `getInquiries(key: Text) : async [Inquiry]`. Replace the existing Internet Identity principal check (`caller != admin`) with a check that validates the provided `key` against the stored access key. If the key matches, return all inquiries. If it does not match, return an empty array or trap with an error.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Ensure `submitInquiry` (the customer-facing form submission function) remains publicly callable with no authentication requirement — no access key and no principal check. The function signature and behaviour must remain unchanged for anonymous callers.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-9",
-      "summary": "Update the `Admin.tsx` dashboard page so that it reads the access key from `sessionStorage` on load. Pass that access key when calling the backend `getInquiries(key)` function. If no access key is found in sessionStorage, redirect the user to `/admin/login`. Remove any Internet Identity principal-based access control from this page. The dashboard must still display the inquiries table with 'Mark Resolved' and 'Delete' actions; update those backend calls to use access-key auth if they also have principal checks.",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "Azad Nexus",
+  "projectName": "Reset admin credentials to new username and password",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
